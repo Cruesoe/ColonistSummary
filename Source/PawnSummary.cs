@@ -13,6 +13,13 @@ namespace ColonySummary
         // Below this bleed rate the vanilla Health tab shows no bleeding
         private const float MinBleedRate = 0.01f;
 
+        public readonly Pawn pawn;
+        public string name = "";
+        // Place in the colonist bar's order
+        public int order;
+        // Lower-case name, weapon and apparel labels for the search field
+        public string searchText = "";
+
         public int signature;
         public readonly List<GearItem> weapons = new List<GearItem>();
         public readonly List<GearItem> apparel = new List<GearItem>();
@@ -38,8 +45,18 @@ namespace ColonySummary
         public string bleedText = "";
         public string bleedTip = "";
         public bool bleedLethal;
+        // Share of blood left, for the bleeding heart
+        public float bloodLeft = 1f;
+        public string ideoTip = "";
+        public string xenotypeTip = "";
 
         private static readonly List<Apparel> tmpApparel = new List<Apparel>();
+        private static readonly StringBuilder searchBuilder = new StringBuilder();
+
+        public PawnSummary(Pawn pawn)
+        {
+            this.pawn = pawn;
+        }
 
         // Changes whenever a weapon or apparel item is added, removed or damaged
         public static int Signature(Pawn pawn)
@@ -96,6 +113,17 @@ namespace ColonySummary
             weaponsTip = ListTip(weapons);
             apparelTip = ListTip(apparel);
             statsTick = int.MinValue;
+            RebuildSearch();
+        }
+
+        private void RebuildSearch()
+        {
+            searchBuilder.Clear();
+            searchBuilder.Append(name);
+            for (int i = 0; i < weapons.Count; i++) searchBuilder.Append('\n').Append(weapons[i].thing.LabelNoCount);
+            for (int i = 0; i < apparel.Count; i++) searchBuilder.Append('\n').Append(apparel[i].thing.LabelNoCount);
+            searchText = searchBuilder.ToString().ToLowerInvariant();
+            searchBuilder.Clear();
         }
 
         // Stats, age and health, rebuilt once a game second, when hediffs change and after a gear change
@@ -106,6 +134,15 @@ namespace ColonySummary
             if (now - statsTick < StatsRefreshTicks && now >= statsTick && hediffs.Count == statsHediffCount) return;
             statsTick = now;
             statsHediffCount = hediffs.Count;
+
+            string newName = pawn.LabelShortCap;
+            if (newName != name)
+            {
+                name = newName;
+                RebuildSearch();
+            }
+            ideoTip = pawn.Ideo != null ? pawn.Ideo.name + "\n\n" + "ClickForMoreInfo".Translate() : "";
+            xenotypeTip = pawn.genes != null ? pawn.genes.XenotypeLabelCap.ToString() : "";
 
             SetArmor(pawn, 0, StatDefOf.ArmorRating_Sharp);
             SetArmor(pawn, 1, StatDefOf.ArmorRating_Blunt);
@@ -122,6 +159,8 @@ namespace ColonySummary
             ageText = pawn.ageTracker.AgeBiologicalYears.ToStringCached();
             ageTip = pawn.ageTracker.AgeTooltipString;
 
+            Hediff? bloodLoss = pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.BloodLoss);
+            bloodLeft = 1f - (bloodLoss?.Severity ?? 0f);
             bleedRate = pawn.health.hediffSet.BleedRateTotal;
             bleedDeathTicks = int.MaxValue;
             bleedLethal = false;
@@ -179,13 +218,14 @@ namespace ColonySummary
         private static string ItemTip(Pawn pawn, Thing thing)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append(thing.LabelCap);
             if (thing is Apparel ap)
             {
-                if (pawn.outfits != null && pawn.outfits.forcedHandler.IsForced(ap)) sb.Append(", ").Append("ApparelForcedLower".Translate());
-                if (pawn.apparel != null && pawn.apparel.IsLocked(ap)) sb.Append(" (").Append("ApparelLockedLower".Translate()).Append(")");
+                bool forced = pawn.outfits != null && pawn.outfits.forcedHandler.IsForced(ap);
+                bool locked = pawn.apparel != null && pawn.apparel.IsLocked(ap);
+                if (forced) sb.Append("ApparelForcedLower".Translate().CapitalizeFirst());
+                if (locked) sb.Append(forced ? ", " : "").Append(forced ? "ApparelLockedLower".Translate() : "ApparelLockedLower".Translate().CapitalizeFirst());
+                if (forced || locked) sb.AppendLine().AppendLine();
             }
-            sb.AppendLine().AppendLine();
             sb.Append("ColonySummary_ClickForInfo".Translate());
             return sb.ToString();
         }

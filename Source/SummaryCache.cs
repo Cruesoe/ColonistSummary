@@ -8,23 +8,16 @@ namespace ColonySummary
     {
         private static readonly Dictionary<Pawn, PawnSummary> entries = new Dictionary<Pawn, PawnSummary>();
 
-        // Set when a pawn's gear changes after the table was laid out
-        public static bool TableStale;
-
         public static PawnSummary Get(Pawn pawn)
         {
             int signature = PawnSummary.Signature(pawn);
             if (entries.TryGetValue(pawn, out PawnSummary? summary))
             {
-                if (summary.signature != signature)
-                {
-                    summary.RebuildGear(pawn, signature);
-                    TableStale = true;
-                }
+                if (summary.signature != signature) summary.RebuildGear(pawn, signature);
             }
             else
             {
-                summary = new PawnSummary();
+                summary = new PawnSummary(pawn);
                 summary.RebuildGear(pawn, signature);
                 entries[pawn] = summary;
             }
@@ -32,11 +25,6 @@ namespace ColonySummary
             return summary;
         }
 
-        public static void Clear()
-        {
-            entries.Clear();
-            SkillTooltip.Clear();
-            TableStale = false;
-        }
+        public static void Clear() => entries.Clear();
     }
 }
