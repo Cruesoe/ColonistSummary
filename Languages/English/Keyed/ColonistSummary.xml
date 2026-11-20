@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <ColonistSummary_ClickForInfo>Click for more information.</ColonistSummary_ClickForInfo>
+  <ColonistSummary_CurrentTemperature>Current temperature: {0}</ColonistSummary_CurrentTemperature>
+  <ColonistSummary_Failed>The Summary tab hit a problem and stops drawing until the game restarts. The log has the details.</ColonistSummary_Failed>
+
+  <ColonistSummary_Colonists>Colonists</ColonistSummary_Colonists>
+  <ColonistSummary_ColonistCount>{0} colonists</ColonistSummary_ColonistCount>
+  <ColonistSummary_ShownOf>{0} of {1} shown</ColonistSummary_ShownOf>
+  <ColonistSummary_NoColonists>No colonists.</ColonistSummary_NoColonists>
+  <ColonistSummary_NoneShown>No colonists match the search.</ColonistSummary_NoneShown>
+  <ColonistSummary_RowTip>Click to select this colonist and jump to them.</ColonistSummary_RowTip>
+
+  <ColonistSummary_Search>Search</ColonistSummary_Search>
+  <ColonistSummary_SearchHint>Search colonists</ColonistSummary_SearchHint>
+  <ColonistSummary_SearchTip>Finds colonists by name, weapon or apparel.</ColonistSummary_SearchTip>
+  <ColonistSummary_SearchFound>{0} found</ColonistSummary_SearchFound>
+
+  <ColonistSummary_SortMenu>Sort colonists</ColonistSummary_SortMenu>
+  <ColonistSummary_SortButtonTip>Sorted by {0}, {1}. Click a column heading to sort by it, or open this menu for every choice.</ColonistSummary_SortButtonTip>
+  <ColonistSummary_Sort_Usual>Usual order</ColonistSummary_Sort_Usual>
+  <ColonistSummary_Sort_UsualTip>The colonist bar's order.</ColonistSummary_Sort_UsualTip>
+  <ColonistSummary_Name>Name</ColonistSummary_Name>
+  <ColonistSummary_SortNameTip>Sorts by name.</ColonistSummary_SortNameTip>
+
+  <ColonistSummary_Stat_Colonists>Colonists</ColonistSummary_Stat_Colonists>
+  <ColonistSummary_Stat_ColonistsTip>Free colonists on every map, in caravans and in transporters, except babies.</ColonistSummary_Stat_ColonistsTip>
+  <ColonistSummary_Stat_Bleeding>Bleeding</ColonistSummary_Stat_Bleeding>
+  <ColonistSummary_Stat_BleedingTip>Colonists who are bleeding.</ColonistSummary_Stat_BleedingTip>
+  <ColonistSummary_Stat_Uncomfortable>Uncomfortable</ColonistSummary_Stat_Uncomfortable>
+  <ColonistSummary_Stat_UncomfortableTip>Colonists outside their comfortable temperature range where they are.</ColonistSummary_Stat_UncomfortableTip>
+
+  <ColonistSummary_Column_Ideo>Ideoligion</ColonistSummary_Column_Ideo>
+  <ColonistSummary_Column_IdeoTip>Click an icon to open the ideoligion.</ColonistSummary_Column_IdeoTip>
+  <ColonistSummary_Column_Xenotype>Xenotype</ColonistSummary_Column_Xenotype>
+  <ColonistSummary_Column_XenotypeTip>Each colonist's xenotype.</ColonistSummary_Column_XenotypeTip>
+  <ColonistSummary_Column_Age>Age</ColonistSummary_Column_Age>
+  <ColonistSummary_Column_AgeTip>Biological age in years.</ColonistSummary_Column_AgeTip>
+  <ColonistSummary_Column_Hostility>Fight or flee</ColonistSummary_Column_Hostility>
+  <ColonistSummary_Column_HostilityTip>What each colonist does when enemies come near. Click to change it.</ColonistSummary_Column_HostilityTip>
+  <ColonistSummary_Column_Bleeding>Bleeding</ColonistSummary_Column_Bleeding>
+  <ColonistSummary_Column_BleedingTip>Red shows the time until death by blood loss; yellow shows the bleed rate per day when there's no risk of bleeding out soon.</ColonistSummary_Column_BleedingTip>
+  <ColonistSummary_Column_Weapon>Weapon</ColonistSummary_Column_Weapon>
+  <ColonistSummary_Column_WeaponTip>Equipped weapons. Click one to open its info card.</ColonistSummary_Column_WeaponTip>
+  <ColonistSummary_Column_Apparel>Apparel</ColonistSummary_Column_Apparel>
+  <ColonistSummary_Column_ApparelTip>Worn apparel, outer layers first. Click one to open its info card. Sorts by the number of items worn.</ColonistSummary_Column_ApparelTip>
+  <ColonistSummary_Column_Sharp>Sharp</ColonistSummary_Column_Sharp>
+  <ColonistSummary_Column_SharpTip>Overall sharp armor, from apparel and body. The bar fills at 100%.</ColonistSummary_Column_SharpTip>
+  <ColonistSummary_Column_Blunt>Blunt</ColonistSummary_Column_Blunt>
+  <ColonistSummary_Column_BluntTip>Overall blunt armor, from apparel and body. The bar fills at 100%.</ColonistSummary_Column_BluntTip>
+  <ColonistSummary_Column_Heat>Heat</ColonistSummary_Column_Heat>
+  <ColonistSummary_Column_HeatTip>Overall heat armor, from apparel and body. The bar fills at 100%.</ColonistSummary_Column_HeatTip>
+  <ColonistSummary_Column_Comfort>Comfortable</ColonistSummary_Column_Comfort>
+  <ColonistSummary_Column_ComfortTip>Comfortable temperature range, in green while the current temperature is inside it. Sorts by the lowest comfortable temperature.</ColonistSummary_Column_ComfortTip>
+</LanguageData>

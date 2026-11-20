@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ColonySummary
+namespace ColonistSummary
 {
     // The colonist bar's order; a sort choice only, never drawn
     public class UsualOrderColumn : SummaryColumn

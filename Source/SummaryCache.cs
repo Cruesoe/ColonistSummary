@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Verse;
 
-namespace ColonySummary
+namespace ColonistSummary
 {
     // Per-pawn row data; lifetime is the Summary window, cleared when it opens and closes
     public static class SummaryCache

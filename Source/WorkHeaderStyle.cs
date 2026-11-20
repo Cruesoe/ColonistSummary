@@ -2,7 +2,7 @@ using System;
 using System.Reflection;
 using Verse;
 
-namespace ColonySummary
+namespace ColonistSummary
 {
     // Reads the header style set in UI Rethemed - Work's settings, or Classic without it; members are resolved once per session
     public static class WorkHeaderStyle
@@ -43,7 +43,7 @@ namespace ColonySummary
             styleField = settingsField?.FieldType.GetField("headerStyle", BindingFlags.Public | BindingFlags.Instance);
             if (mod != null && (settingsField == null || styleField == null))
             {
-                Log.Warning("[Colony Summary] Couldn't read UI Rethemed - Work's header style; skill headers use the classic style.");
+                Log.Warning("[Colonist Summary] Couldn't read UI Rethemed - Work's header style; skill headers use the classic style.");
             }
         }
     }

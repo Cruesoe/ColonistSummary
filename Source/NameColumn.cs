@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ColonySummary
+namespace ColonistSummary
 {
     // Sorts by name; the pinned name cell itself is drawn by SummaryTable
     public class NameColumn : SummaryColumn

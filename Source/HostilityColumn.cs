@@ -2,7 +2,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace ColonySummary
+namespace ColonistSummary
 {
     // The game's fight-or-flee button, changeable right in the table
     public class HostilityColumn : SummaryColumn

@@ -2,7 +2,7 @@ using UIRethemed.Core;
 using UnityEngine;
 using Verse;
 
-namespace ColonySummary
+namespace ColonistSummary
 {
     // Bleeding heart with the time until death by blood loss in red, or the bleed rate when it isn't lethal soon
     public class BleedingColumn : SummaryColumn

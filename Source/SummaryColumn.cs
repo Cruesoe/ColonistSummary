@@ -1,7 +1,7 @@
 using UnityEngine;
 using Verse;
 
-namespace ColonySummary
+namespace ColonistSummary
 {
     // One column of the Summary table: heading, cell and sort order; built once per session
     public abstract class SummaryColumn

@@ -1,7 +1,7 @@
 using UIRethemed.Core;
 using UnityEngine;
 
-namespace ColonySummary
+namespace ColonistSummary
 {
     // Comfortable temperature range, in green while the pawn's current temperature is inside it
     public class ComfortColumn : TextColumn

@@ -5,7 +5,7 @@ using UIRethemed.Core;
 using UnityEngine;
 using Verse;
 
-namespace ColonySummary
+namespace ColonistSummary
 {
     // Every column in table order, with one per skill in the Bio tab's order; session lifetime, from defs and translations only
     [StaticConstructorOnStartup]
@@ -30,11 +30,11 @@ namespace ColonySummary
 
         static SummaryColumns()
         {
-            Usual.label = "ColonySummary_Sort_Usual".Translate();
-            Usual.tip = "ColonySummary_Sort_UsualTip".Translate();
+            Usual.label = "ColonistSummary_Sort_Usual".Translate();
+            Usual.tip = "ColonistSummary_Sort_UsualTip".Translate();
             Usual.icon = UsualTex;
-            Name.label = "ColonySummary_Name".Translate();
-            Name.tip = "ColonySummary_SortNameTip".Translate();
+            Name.label = "ColonistSummary_Name".Translate();
+            Name.tip = "ColonistSummary_SortNameTip".Translate();
             Name.icon = NameTex;
 
             Add(new IdeoColumn(), "Ideo", CoreWidgets.Icon("hands-praying"));
@@ -58,8 +58,8 @@ namespace ColonySummary
 
         private static void Add(SummaryColumn column, string key, Texture2D? icon)
         {
-            column.label = ("ColonySummary_Column_" + key).Translate();
-            column.tip = ("ColonySummary_Column_" + key + "Tip").Translate();
+            column.label = ("ColonistSummary_Column_" + key).Translate();
+            column.tip = ("ColonistSummary_Column_" + key + "Tip").Translate();
             column.icon = icon;
             All.Add(column);
         }

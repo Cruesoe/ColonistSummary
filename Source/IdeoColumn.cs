@@ -3,7 +3,7 @@ using UIRethemed.Core;
 using UnityEngine;
 using Verse;
 
-namespace ColonySummary
+namespace ColonistSummary
 {
     // Ideoligion icon in its color; click to open it in the Ideoligions tab. Shown with Ideology outside classic mode
     public class IdeoColumn : SummaryColumn

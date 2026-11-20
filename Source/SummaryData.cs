@@ -3,7 +3,7 @@ using RimWorld;
 using UIRethemed.Core;
 using Verse;
 
-namespace ColonySummary
+namespace ColonistSummary
 {
     // Listed colonists, the search, sorting and summary counts; rows are rebuilt once a game second and when the search or sort changes.
     // Lifetime: the Summary window (Clear on open and close); the sort choice lasts for the session.
@@ -111,13 +111,13 @@ namespace ColonySummary
             shown.Sort(comparison);
 
             countText = shown.Count == all.Count
-                ? "ColonySummary_ColonistCount".Translate(all.Count).ToString()
-                : "ColonySummary_ShownOf".Translate(shown.Count, all.Count).ToString();
+                ? "ColonistSummary_ColonistCount".Translate(all.Count).ToString()
+                : "ColonistSummary_ShownOf".Translate(shown.Count, all.Count).ToString();
 
             stats.Clear();
-            stats.Add(new SummaryStat(SummaryColumns.ColonistsTex, all.Count, Theme.HighlightGreen, "ColonySummary_Stat_Colonists".Translate(), "ColonySummary_Stat_ColonistsTip".Translate()));
-            stats.Add(new SummaryStat(SummaryColumns.BleedingTex, bleeding, Theme.HighlightRed, "ColonySummary_Stat_Bleeding".Translate(), "ColonySummary_Stat_BleedingTip".Translate()));
-            stats.Add(new SummaryStat(SummaryColumns.TemperatureTex, uncomfortable, Theme.HighlightYellow, "ColonySummary_Stat_Uncomfortable".Translate(), "ColonySummary_Stat_UncomfortableTip".Translate()));
+            stats.Add(new SummaryStat(SummaryColumns.ColonistsTex, all.Count, Theme.HighlightGreen, "ColonistSummary_Stat_Colonists".Translate(), "ColonistSummary_Stat_ColonistsTip".Translate()));
+            stats.Add(new SummaryStat(SummaryColumns.BleedingTex, bleeding, Theme.HighlightRed, "ColonistSummary_Stat_Bleeding".Translate(), "ColonistSummary_Stat_BleedingTip".Translate()));
+            stats.Add(new SummaryStat(SummaryColumns.TemperatureTex, uncomfortable, Theme.HighlightYellow, "ColonistSummary_Stat_Uncomfortable".Translate(), "ColonistSummary_Stat_UncomfortableTip".Translate()));
             version++;
         }
 

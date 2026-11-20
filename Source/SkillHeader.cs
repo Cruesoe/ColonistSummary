@@ -3,7 +3,7 @@ using UIRethemed.Core;
 using UnityEngine;
 using Verse;
 
-namespace ColonySummary
+namespace ColonistSummary
 {
     // Skill column headings drawn like UI Rethemed - Work's job headings, in the style chosen there
     public static class SkillHeader

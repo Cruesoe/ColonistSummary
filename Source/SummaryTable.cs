@@ -5,7 +5,7 @@ using UnityEngine;
 using Verse;
 using Verse.Sound;
 
-namespace ColonySummary
+namespace ColonistSummary
 {
     // The colonists panel: column headings and one row per colonist, with the name column pinned while the table scrolls sideways
     public static class SummaryTable
@@ -36,10 +36,10 @@ namespace ColonySummary
         public static void Opened()
         {
             scroll = Vector2.zero;
-            title ??= "ColonySummary_Colonists".Translate();
-            noColonists ??= "ColonySummary_NoColonists".Translate();
-            noneShown ??= "ColonySummary_NoneShown".Translate();
-            rowTip ??= "ColonySummary_RowTip".Translate();
+            title ??= "ColonistSummary_Colonists".Translate();
+            noColonists ??= "ColonistSummary_NoColonists".Translate();
+            noneShown ??= "ColonistSummary_NoneShown".Translate();
+            rowTip ??= "ColonistSummary_RowTip".Translate();
         }
 
         private static bool InView => viewport.Contains(Event.current.mousePosition);

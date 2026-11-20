@@ -4,12 +4,12 @@ using UIRethemed.Core;
 using UnityEngine;
 using Verse;
 
-namespace ColonySummary
+namespace ColonistSummary
 {
     // The Summary tab in the UI Rethemed look: title bar with the colony's numbers, search and sort menu, then the colonists table
-    public class MainTabWindow_ColonySummary : MainTabWindow
+    public class MainTabWindow_ColonistSummary : MainTabWindow
     {
-        private const string Part = "Colony Summary";
+        private const string Part = "Colonist Summary";
         private const float TitleHeight = 40f;
         private const float Pad = 6f;
         private const float MinWidth = 900f;
@@ -19,7 +19,7 @@ namespace ColonySummary
         private const float MinSearchWidth = 140f;
         private const float MaxSearchWidth = 240f;
         private const float ControlHeight = 28f;
-        private const string SearchControl = "ColonySummary_Search";
+        private const string SearchControl = "ColonistSummary_Search";
 
         // Session lifetime, from translations only
         private static string? searchHint;
@@ -41,7 +41,7 @@ namespace ColonySummary
         private SortChoices? choices;
         private int choicesColumns;
 
-        public MainTabWindow_ColonySummary()
+        public MainTabWindow_ColonistSummary()
         {
             doWindowBackground = false;
             draw = DrawContents;
@@ -69,11 +69,11 @@ namespace ColonySummary
             SummaryData.Clear();
             SkillHeader.Opened();
             SummaryTable.Opened();
-            searchHint ??= "ColonySummary_SearchHint".Translate();
-            searchTitle ??= "ColonySummary_Search".Translate();
-            searchTip ??= "ColonySummary_SearchTip".Translate();
-            sortMenuTitle ??= "ColonySummary_SortMenu".Translate();
-            failed ??= "ColonySummary_Failed".Translate();
+            searchHint ??= "ColonistSummary_SearchHint".Translate();
+            searchTitle ??= "ColonistSummary_Search".Translate();
+            searchTip ??= "ColonistSummary_SearchTip".Translate();
+            sortMenuTitle ??= "ColonistSummary_SortMenu".Translate();
+            failed ??= "ColonistSummary_Failed".Translate();
             laidOut = -1;
             choices = null;
             base.PreOpen();
@@ -120,8 +120,8 @@ namespace ColonySummary
             laidOut = SummaryData.version;
             sortLabel = SummaryData.sortBy.label;
             string direction = SummaryData.descending ? "UIRethemedCore_Descending".Translate() : "UIRethemedCore_Ascending".Translate();
-            sortTip = "ColonySummary_SortButtonTip".Translate(sortLabel, direction);
-            searchFound = "ColonySummary_SearchFound".Translate(SummaryData.shown.Count);
+            sortTip = "ColonistSummary_SortButtonTip".Translate(sortLabel, direction);
+            searchFound = "ColonistSummary_SearchFound".Translate(SummaryData.shown.Count);
         }
 
         private float Age => ThemeMotion.On ? ThemeMotion.Now - openedAt : float.MaxValue;

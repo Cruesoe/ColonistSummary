@@ -2,7 +2,7 @@ using UIRethemed.Core;
 using UnityEngine;
 using Verse;
 
-namespace ColonySummary
+namespace ColonistSummary
 {
     // Overall sharp, blunt or heat armor with a gauge that fills at 100%
     public class ArmorColumn : SummaryColumn

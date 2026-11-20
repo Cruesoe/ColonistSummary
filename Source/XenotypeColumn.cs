@@ -3,7 +3,7 @@ using UIRethemed.Core;
 using UnityEngine;
 using Verse;
 
-namespace ColonySummary
+namespace ColonistSummary
 {
     // Xenotype icon, shown with Biotech
     public class XenotypeColumn : SummaryColumn

@@ -4,7 +4,7 @@ using UIRethemed.Core;
 using UnityEngine;
 using Verse;
 
-namespace ColonySummary
+namespace ColonistSummary
 {
     // Weapons or worn apparel as item slots; hover for the item, click for its info card
     public class GearColumn : SummaryColumn

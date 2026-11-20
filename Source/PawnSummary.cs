@@ -4,7 +4,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace ColonySummary
+namespace ColonistSummary
 {
     // One pawn's row data: gear icons are rebuilt when the gear changes, everything else once a game second
     public class PawnSummary
@@ -153,7 +153,7 @@ namespace ColonySummary
             comfyText = comfyMin.ToStringTemperature("F0") + " ~ " + comfyMax.ToStringTemperature("F0");
             float ambient = pawn.AmbientTemperature;
             comfyNow = ambient >= comfyMin && ambient <= comfyMax;
-            comfyTip = "ColonySummary_CurrentTemperature".Translate(ambient.ToStringTemperature("F0"));
+            comfyTip = "ColonistSummary_CurrentTemperature".Translate(ambient.ToStringTemperature("F0"));
 
             ageTicks = (int)(pawn.ageTracker.AgeBiologicalTicks / 2500L);
             ageText = pawn.ageTracker.AgeBiologicalYears.ToStringCached();
@@ -226,7 +226,7 @@ namespace ColonySummary
                 if (locked) sb.Append(forced ? ", " : "").Append(forced ? "ApparelLockedLower".Translate() : "ApparelLockedLower".Translate().CapitalizeFirst());
                 if (forced || locked) sb.AppendLine().AppendLine();
             }
-            sb.Append("ColonySummary_ClickForInfo".Translate());
+            sb.Append("ColonistSummary_ClickForInfo".Translate());
             return sb.ToString();
         }
 

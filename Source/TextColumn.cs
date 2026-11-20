@@ -2,7 +2,7 @@ using UIRethemed.Core;
 using UnityEngine;
 using Verse;
 
-namespace ColonySummary
+namespace ColonistSummary
 {
     // A centered value from the pawn's cached summary, with an optional hover card, sorted by its number
     public abstract class TextColumn : SummaryColumn

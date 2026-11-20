@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>ColonySummary</RootNamespace>
-    <AssemblyName>ColonySummary</AssemblyName>
+    <RootNamespace>ColonistSummary</RootNamespace>
+    <AssemblyName>ColonistSummary</AssemblyName>
     <Nullable>enable</Nullable>
     <UseHarmony>false</UseHarmony>
     <UnityModules>CoreModule;IMGUIModule;TextRenderingModule</UnityModules>

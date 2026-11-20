@@ -3,7 +3,7 @@ using UIRethemed.Core;
 using UnityEngine;
 using Verse;
 
-namespace ColonySummary
+namespace ColonistSummary
 {
     // One skill as a box tinted by level, with its passion and the theme's skill card on hover
     public class SkillColumn : SummaryColumn

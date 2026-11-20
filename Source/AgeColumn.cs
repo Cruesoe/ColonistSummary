@@ -1,4 +1,4 @@
-namespace ColonySummary
+namespace ColonistSummary
 {
     // Biological age in years; hover for the full age
     public class AgeColumn : TextColumn
