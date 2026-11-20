@@ -17,6 +17,12 @@ See at a glance who's bleeding out, who's best at what and who's under-armored, 
 [*][b]Everyone:[/b] Colonists in caravans and transporters are listed too.
 [/list]
 
+[h2]Settings[/h2]
+[list]
+[*][b]Window size[/b]: fit the tab to the screen width or height, or scale it from 70% to 130% of its usual width and 80% to 120% of its usual height, as on the other UI Rethemed tabs.
+[*][b]Height fits the colonists[/b]: the tab is only as tall as its colonists need, growing as they join, up to the height above. On by default.
+[/list]
+
 [h2]Compatibility[/h2]
 Requires [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3832843406]UI Rethemed - Core[/url].
 Safe to add to or remove from an existing save.

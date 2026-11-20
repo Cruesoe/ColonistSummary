@@ -14,6 +14,7 @@ namespace ColonistSummary
         private const float Pad = 6f;
         private const float MinWidth = 900f;
         private const float MinHeight = 360f;
+        private const float UsualMinHeight = 560f;
         private const float MaxHeight = 900f;
         private const float HeightOfScreen = 0.8f;
         private const float MinSearchWidth = 140f;
@@ -52,16 +53,33 @@ namespace ColonistSummary
 
         protected override float Margin => 0f;
 
+        // The usual size is as wide as the columns and 80% of the screen high, scaled or filled by the size settings;
+        // with fit to colonists the height shrinks to the rows
         public override Vector2 RequestedTabSize
         {
             get
             {
                 SummaryData.Refresh();
+                ColonistSummarySettings settings = ColonistSummaryMod.Settings;
                 float width = Mathf.Max(MinWidth, Mathf.Ceil(SummaryTable.ContentWidth + 16f + 8f + Pad * 2f));
-                float fit = TitleHeight + Pad + SummaryTable.PanelChrome + SkillHeader.Height + SummaryTable.RowGap + SummaryTable.ContentHeight + Pad * 2f;
-                float most = Mathf.Clamp(UI.screenHeight * HeightOfScreen, MinHeight, MaxHeight);
-                return new Vector2(Mathf.Min(width, UI.screenWidth), Mathf.Clamp(Mathf.Ceil(fit), MinHeight, most));
+                float height = Mathf.Clamp(UI.screenHeight * HeightOfScreen, UsualMinHeight, MaxHeight);
+                Vector2 size = settings.size.Size(new Vector2(width, height));
+                if (settings.fitToColonists)
+                {
+                    // Every colonist counts, so searching never moves the window
+                    float rows = SummaryData.all.Count * (SummaryTable.RowHeight + SummaryTable.RowGap);
+                    float fit = TitleHeight + Pad + SummaryTable.PanelChrome + SkillHeader.Height + SummaryTable.RowGap + rows + Pad * 2f;
+                    size.y = Mathf.Min(size.y, Mathf.Max(MinHeight, Mathf.Ceil(fit)));
+                }
+                return size;
             }
+        }
+
+        // Resizes the open tab when the size settings or the rows change what it wants
+        public override void WindowUpdate()
+        {
+            base.WindowUpdate();
+            ColonistSummaryMod.Settings.size.Follow(this, RequestedTabSize);
         }
 
         public override void PreOpen()
@@ -138,7 +156,7 @@ namespace ColonistSummary
 
         private void TitleBar(Rect rect)
         {
-            Rect room = CoreWidgets.TitleBar(rect, SummaryColumns.TitleTex, def.LabelCap, Age, close);
+            Rect room = CoreWidgets.TitleBar(rect, SummaryColumns.TitleTex, def.LabelCap, Age, close, ColonistSummaryMod.Instance);
             float y = Mathf.Round(rect.center.y - ControlHeight / 2f);
 
             float sortWidth = SortMenu.ButtonWidth(sortLabel);

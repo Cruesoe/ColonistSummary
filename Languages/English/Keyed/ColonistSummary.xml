@@ -4,6 +4,15 @@
   <ColonistSummary_CurrentTemperature>Current temperature: {0}</ColonistSummary_CurrentTemperature>
   <ColonistSummary_Failed>The Summary tab hit a problem and stops drawing until the game restarts. The log has the details.</ColonistSummary_Failed>
 
+  <ColonistSummary_Settings_TabName>Summary tab</ColonistSummary_Settings_TabName>
+  <ColonistSummary_Settings_Window>Window</ColonistSummary_Settings_Window>
+  <ColonistSummary_Settings_WindowSummaryFit>{0}, fits the colonists</ColonistSummary_Settings_WindowSummaryFit>
+  <ColonistSummary_Settings_FitToColonists>Height fits the colonists</ColonistSummary_Settings_FitToColonists>
+  <ColonistSummary_Settings_FitToColonistsTip>Makes the Summary tab only as tall as its colonists need: it sits on the bottom bar, grows upwards as colonists join and shrinks as they leave. The height above is then the most it grows to; past that the list scrolls.\n\nSearching doesn't change its height, so nothing moves under the mouse while you type.</ColonistSummary_Settings_FitToColonistsTip>
+  <ColonistSummary_Settings_Reset>Reset window size</ColonistSummary_Settings_Reset>
+  <ColonistSummary_Settings_ResetTip>Puts the window size settings back to their defaults.</ColonistSummary_Settings_ResetTip>
+  <ColonistSummary_Settings_ResetNothing>The window size settings are already at their defaults.</ColonistSummary_Settings_ResetNothing>
+
   <ColonistSummary_Colonists>Colonists</ColonistSummary_Colonists>
   <ColonistSummary_ColonistCount>{0} colonists</ColonistSummary_ColonistCount>
   <ColonistSummary_ShownOf>{0} of {1} shown</ColonistSummary_ShownOf>
