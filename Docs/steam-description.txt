@@ -8,8 +8,8 @@ See at a glance who's bleeding out, who's best at what and who's under-armored, 
 [*][b]Ideoligion and xenotype:[/b] Their icons, when Ideology or Biotech is active. Click an ideoligion to open it.
 [*][b]Age:[/b] Each colonist's biological age. Hover for the full age.
 [*][b]Fight or flee:[/b] The vanilla hostility response button, changeable right in the table.
-[*][b]Bleeding:[/b] A beating heart with the time until death by blood loss in red, or the bleed rate when there's no risk of bleeding out soon.
-[*][b]Infection:[/b] The worst infection or other disease a colonist is building immunity to, in green while immunity is winning and red while the disease is. Hover for each disease's immunity and severity and how long until immunity or death.
+[*][b]Bleeding:[/b] A beating heart with the time until death by blood loss, in red within half a day and yellow within a day, or the bleed rate in green when there's no risk of bleeding out soon. Hover for the blood left and each bleeding wound.
+[*][b]Infection:[/b] The worst infection or other disease a colonist is building immunity to, in green while immunity is winning, yellow when only just, and red while the disease is. Hover for each disease's immunity and severity and how long until immunity or death.
 [*][b]Skills:[/b] Every skill, in the Bio tab's order, in a box tinted by level, with its passion. Hover for the skill card. Skills added by other mods get their own columns. The headings follow the header style set in UI Rethemed - Work: classic, slanted, vertical or icons.
 [*][b]Gear:[/b] Weapon and worn apparel as item slots. Damaged items show a condition bar, in red below half. Hover for the name, and click to open the info card.
 [*][b]Protection:[/b] Overall sharp, blunt and heat armor with a bar that fills at 100%, calculated the same way as the Gear tab.

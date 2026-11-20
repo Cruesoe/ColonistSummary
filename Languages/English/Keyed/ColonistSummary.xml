@@ -48,9 +48,12 @@
   <ColonistSummary_Column_Hostility>Fight or flee</ColonistSummary_Column_Hostility>
   <ColonistSummary_Column_HostilityTip>What each colonist does when enemies come near. Click to change it.</ColonistSummary_Column_HostilityTip>
   <ColonistSummary_Column_Bleeding>Bleeding</ColonistSummary_Column_Bleeding>
-  <ColonistSummary_Column_BleedingTip>Red shows the time until death by blood loss; yellow shows the bleed rate per day when there's no risk of bleeding out soon.</ColonistSummary_Column_BleedingTip>
+  <ColonistSummary_Column_BleedingTip>Time until death by blood loss: red within half a day, yellow within a day. Green shows the bleed rate per day when there's no risk of bleeding out soon. Hover for the blood left and each bleeding wound.</ColonistSummary_Column_BleedingTip>
+  <ColonistSummary_BloodLeft>Blood left: {0}</ColonistSummary_BloodLeft>
+  <ColonistSummary_BleedingWounds>Bleeding wounds:</ColonistSummary_BleedingWounds>
+  <ColonistSummary_Tended>tended</ColonistSummary_Tended>
   <ColonistSummary_Column_Infection>Infection</ColonistSummary_Column_Infection>
-  <ColonistSummary_Column_InfectionTip>Infections and other diseases the body builds immunity to, such as flu, plague and malaria. Green while immunity is winning, red while the disease is. With more than one, the cell shows the worst.</ColonistSummary_Column_InfectionTip>
+  <ColonistSummary_Column_InfectionTip>Infections and other diseases the body builds immunity to, such as flu, plague and malaria. Green while immunity is winning, yellow when it's winning only just, red while the disease is. With more than one, the cell shows the worst.</ColonistSummary_Column_InfectionTip>
   <ColonistSummary_InfectionMore>{0} +{1}</ColonistSummary_InfectionMore>
   <ColonistSummary_InfectionLevels>Immunity {0}, severity {1}</ColonistSummary_InfectionLevels>
   <ColonistSummary_InfectionWinning>Immunity is winning: immune in {0}.</ColonistSummary_InfectionWinning>

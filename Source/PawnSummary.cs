@@ -43,7 +43,7 @@ namespace ColonistSummary
         public int bleedDeathTicks = int.MaxValue;
         public string bleedText = "";
         public string bleedTip = "";
-        public bool bleedLethal;
+        public Danger bleedDanger;
         // Share of blood left, for the bleeding heart
         public float bloodLeft = 1f;
         public string ideoTip = "";
@@ -51,7 +51,7 @@ namespace ColonistSummary
         // Worst disease the body is racing to build immunity to; empty when there is none
         public string infectionText = "";
         public string infectionTip = "";
-        public bool infectionLosing;
+        public Danger infectionDanger;
         public float infectionRank;
         // What the cached tips and armor were built from
         private Ideo? tipIdeo;
@@ -62,6 +62,7 @@ namespace ColonistSummary
 
         private static readonly object Unbuilt = new object();
         private static readonly List<Apparel> tmpApparel = new List<Apparel>();
+        private static readonly List<Hediff> tmpWounds = new List<Hediff>();
         private static readonly StringBuilder searchBuilder = new StringBuilder();
 
         public PawnSummary(Pawn pawn)
@@ -185,39 +186,73 @@ namespace ColonistSummary
             ageText = pawn.ageTracker.AgeBiologicalYears.ToStringCached();
             ageTip = pawn.ageTracker.AgeTooltipString;
 
+            RefreshBleeding(pawn, hediffs);
+            RefreshInfection(hediffs);
+        }
+
+        // Green when the colonist won't bleed out soon (or is deathless), yellow within a day, red within half a day
+        private void RefreshBleeding(Pawn pawn, List<Hediff> hediffs)
+        {
             Hediff? bloodLoss = pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.BloodLoss);
             bloodLeft = 1f - (bloodLoss?.Severity ?? 0f);
             bleedRate = pawn.health.hediffSet.BleedRateTotal;
             bleedDeathTicks = int.MaxValue;
-            bleedLethal = false;
+            bleedDanger = Danger.None;
             bleedText = "";
             bleedTip = "";
-            if (bleedRate > MinBleedRate)
-            {
-                // Same text as the vanilla Health tab
-                string tip = "BleedingRate".Translate() + ": " + bleedRate.ToStringPercent() + "/" + "LetterDay".Translate();
-                int ticks = HealthUtility.TicksUntilDeathDueToBloodLoss(pawn);
-                if (ModsConfig.BiotechActive && pawn.genes != null && pawn.genes.HasActiveGene(GeneDefOf.Deathless))
-                {
-                    tip += " (" + "Deathless".Translate() + ")";
-                    bleedText = bleedRate.ToStringPercent();
-                }
-                else if (ticks >= GenDate.TicksPerDay)
-                {
-                    tip += " (" + "WontBleedOutSoon".Translate() + ")";
-                    bleedText = bleedRate.ToStringPercent();
-                }
-                else
-                {
-                    tip += " (" + "TimeToDeath".Translate(ticks.ToStringTicksToPeriod()) + ")";
-                    bleedText = ticks.ToStringTicksToPeriod(allowSeconds: false, shortForm: true, canUseDecimals: false);
-                    bleedDeathTicks = ticks;
-                    bleedLethal = true;
-                }
-                bleedTip = tip;
-            }
+            if (bleedRate <= MinBleedRate) return;
 
-            RefreshInfection(hediffs);
+            // Same rate and verdict text as the vanilla Health tab
+            StringBuilder tip = new StringBuilder();
+            tip.Append("BleedingRate".Translate()).Append(": ").Append(bleedRate.ToStringPercent()).Append('/').Append("LetterDay".Translate()).AppendLine();
+            tip.Append("ColonistSummary_BloodLeft".Translate(bloodLeft.ToStringPercent())).AppendLine();
+            int ticks = HealthUtility.TicksUntilDeathDueToBloodLoss(pawn);
+            if (ModsConfig.BiotechActive && pawn.genes != null && pawn.genes.HasActiveGene(GeneDefOf.Deathless))
+            {
+                bleedDanger = Danger.Safe;
+                tip.Append("Deathless".Translate().CapitalizeFirst());
+            }
+            else if (ticks >= GenDate.TicksPerDay)
+            {
+                bleedDanger = Danger.Safe;
+                tip.Append("WontBleedOutSoon".Translate().CapitalizeFirst());
+            }
+            else
+            {
+                bleedDanger = ticks < GenDate.TicksPerDay / 2 ? Danger.Losing : Danger.Close;
+                bleedDeathTicks = ticks;
+                tip.Append("TimeToDeath".Translate(ticks.ToStringTicksToPeriod()).CapitalizeFirst());
+            }
+            bleedText = bleedDanger == Danger.Safe
+                ? bleedRate.ToStringPercent()
+                : ticks.ToStringTicksToPeriod(allowSeconds: false, shortForm: true, canUseDecimals: false);
+
+            // Each wound's share of the total rate, worst first
+            float sum = 0f;
+            for (int i = 0; i < hediffs.Count; i++)
+            {
+                if (hediffs[i].Bleeding) sum += hediffs[i].BleedRate;
+            }
+            if (sum > 0f)
+            {
+                tmpWounds.Clear();
+                for (int i = 0; i < hediffs.Count; i++)
+                {
+                    if (hediffs[i].Bleeding && hediffs[i].Visible) tmpWounds.Add(hediffs[i]);
+                }
+                tmpWounds.SortByDescending(h => h.BleedRate);
+                if (tmpWounds.Count > 0) tip.AppendLine().AppendLine().Append("ColonistSummary_BleedingWounds".Translate());
+                for (int i = 0; i < tmpWounds.Count; i++)
+                {
+                    Hediff wound = tmpWounds[i];
+                    string rate = (wound.BleedRate / sum * bleedRate).ToStringPercent() + "/" + "LetterDay".Translate();
+                    string label = wound.Part != null ? wound.LabelCap + " (" + wound.Part.Label + ")" : wound.LabelCap;
+                    tip.AppendLine().Append("  - ").Append(label).Append(": ").Append(rate);
+                    if (wound.IsTended()) tip.Append(", ").Append("ColonistSummary_Tended".Translate());
+                }
+                tmpWounds.Clear();
+            }
+            bleedTip = tip.ToString();
         }
 
         // Immunity race for each visible disease not yet fully immune; the cell shows the worst, the tip lists them all
@@ -225,7 +260,7 @@ namespace ColonistSummary
         {
             infectionText = "";
             infectionTip = "";
-            infectionLosing = false;
+            infectionDanger = Danger.None;
             infectionRank = 0f;
             Hediff? worst = null;
             int count = 0;
@@ -235,19 +270,19 @@ namespace ColonistSummary
                 Hediff hediff = hediffs[i];
                 if (!hediff.Visible || !HealthFacts.TryPrognosis(hediff, out HealthFacts.Prognosis p) || !p.immunizable || p.fullyImmune) continue;
                 count++;
-                bool losing = p.outcome == HealthFacts.Outcome.Fatal;
-                float rank = InfectionRank(p, losing);
+                Danger danger = p.outcome == HealthFacts.Outcome.Fatal ? Danger.Losing : p.outcome == HealthFacts.Outcome.Close ? Danger.Close : Danger.Safe;
+                float rank = InfectionRank(p, danger);
                 if (worst == null || rank > infectionRank)
                 {
                     worst = hediff;
                     infectionRank = rank;
-                    infectionLosing = losing;
+                    infectionDanger = danger;
                 }
                 tip ??= new StringBuilder();
                 if (tip.Length > 0) tip.AppendLine().AppendLine();
                 tip.Append(hediff.LabelCap).AppendLine();
                 tip.Append("ColonistSummary_InfectionLevels".Translate(p.immunity.ToStringPercent(), p.Fraction(p.severity).ToStringPercent())).AppendLine();
-                tip.Append(InfectionVerdict(p, losing));
+                tip.Append(InfectionVerdict(p, danger));
                 if (p.fatalUntended) tip.AppendLine().Append("ColonistSummary_InfectionKeepTended".Translate());
                 else if (p.needsTending) tip.AppendLine().Append("ColonistSummary_InfectionNeedsTending".Translate());
             }
@@ -256,19 +291,20 @@ namespace ColonistSummary
             infectionTip = tip!.ToString();
         }
 
-        // Losing races first, soonest death first; then winning races, closest first
-        private static float InfectionRank(HealthFacts.Prognosis p, bool losing)
+        // Losing races first, soonest death first; then close races, then winning ones, the narrowest first
+        private static float InfectionRank(HealthFacts.Prognosis p, Danger danger)
         {
-            if (losing) return 2000f - Mathf.Min(p.daysToDeath, 999f);
+            if (danger == Danger.Losing) return 3000f - Mathf.Min(p.daysToDeath, 999f);
             float margin = float.IsInfinity(p.daysToDeath) ? 999f : Mathf.Min(p.daysToDeath - p.daysToImmune, 999f);
-            return 1000f - margin;
+            return (danger == Danger.Close ? 2000f : 1000f) - margin;
         }
 
-        private static string InfectionVerdict(HealthFacts.Prognosis p, bool losing)
+        private static string InfectionVerdict(HealthFacts.Prognosis p, Danger danger)
         {
-            if (losing) return "ColonistSummary_InfectionLosing".Translate(Days(p.daysToDeath));
-            string key = p.outcome == HealthFacts.Outcome.Close ? "ColonistSummary_InfectionClose" : "ColonistSummary_InfectionWinning";
-            return float.IsInfinity(p.daysToImmune) ? "ColonistSummary_InfectionSafe".Translate() : key.Translate(Days(p.daysToImmune));
+            if (danger == Danger.Losing) return "ColonistSummary_InfectionLosing".Translate(Days(p.daysToDeath));
+            if (float.IsInfinity(p.daysToImmune)) return "ColonistSummary_InfectionSafe".Translate();
+            string key = danger == Danger.Close ? "ColonistSummary_InfectionClose" : "ColonistSummary_InfectionWinning";
+            return key.Translate(Days(p.daysToImmune));
         }
 
         private static string Days(float days) => Mathf.RoundToInt(days * GenDate.TicksPerDay).ToStringTicksToPeriod();
