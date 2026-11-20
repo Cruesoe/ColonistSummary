@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
 using RimWorld;
+using UIRethemed.Core;
 using UnityEngine;
 using Verse;
 
@@ -47,6 +48,11 @@ namespace ColonistSummary
         public float bloodLeft = 1f;
         public string ideoTip = "";
         public string xenotypeTip = "";
+        // Worst disease the body is racing to build immunity to; empty when there is none
+        public string infectionText = "";
+        public string infectionTip = "";
+        public bool infectionLosing;
+        public float infectionRank;
         // What the cached tips and armor were built from
         private Ideo? tipIdeo;
         private string? tipIdeoName;
@@ -210,7 +216,62 @@ namespace ColonistSummary
                 }
                 bleedTip = tip;
             }
+
+            RefreshInfection(hediffs);
         }
+
+        // Immunity race for each visible disease not yet fully immune; the cell shows the worst, the tip lists them all
+        private void RefreshInfection(List<Hediff> hediffs)
+        {
+            infectionText = "";
+            infectionTip = "";
+            infectionLosing = false;
+            infectionRank = 0f;
+            Hediff? worst = null;
+            int count = 0;
+            StringBuilder? tip = null;
+            for (int i = 0; i < hediffs.Count; i++)
+            {
+                Hediff hediff = hediffs[i];
+                if (!hediff.Visible || !HealthFacts.TryPrognosis(hediff, out HealthFacts.Prognosis p) || !p.immunizable || p.fullyImmune) continue;
+                count++;
+                bool losing = p.outcome == HealthFacts.Outcome.Fatal;
+                float rank = InfectionRank(p, losing);
+                if (worst == null || rank > infectionRank)
+                {
+                    worst = hediff;
+                    infectionRank = rank;
+                    infectionLosing = losing;
+                }
+                tip ??= new StringBuilder();
+                if (tip.Length > 0) tip.AppendLine().AppendLine();
+                tip.Append(hediff.LabelCap).AppendLine();
+                tip.Append("ColonistSummary_InfectionLevels".Translate(p.immunity.ToStringPercent(), p.Fraction(p.severity).ToStringPercent())).AppendLine();
+                tip.Append(InfectionVerdict(p, losing));
+                if (p.fatalUntended) tip.AppendLine().Append("ColonistSummary_InfectionKeepTended".Translate());
+                else if (p.needsTending) tip.AppendLine().Append("ColonistSummary_InfectionNeedsTending".Translate());
+            }
+            if (worst == null) return;
+            infectionText = count > 1 ? "ColonistSummary_InfectionMore".Translate(worst.LabelBaseCap, count - 1).ToString() : worst.LabelBaseCap;
+            infectionTip = tip!.ToString();
+        }
+
+        // Losing races first, soonest death first; then winning races, closest first
+        private static float InfectionRank(HealthFacts.Prognosis p, bool losing)
+        {
+            if (losing) return 2000f - Mathf.Min(p.daysToDeath, 999f);
+            float margin = float.IsInfinity(p.daysToDeath) ? 999f : Mathf.Min(p.daysToDeath - p.daysToImmune, 999f);
+            return 1000f - margin;
+        }
+
+        private static string InfectionVerdict(HealthFacts.Prognosis p, bool losing)
+        {
+            if (losing) return "ColonistSummary_InfectionLosing".Translate(Days(p.daysToDeath));
+            string key = p.outcome == HealthFacts.Outcome.Close ? "ColonistSummary_InfectionClose" : "ColonistSummary_InfectionWinning";
+            return float.IsInfinity(p.daysToImmune) ? "ColonistSummary_InfectionSafe".Translate() : key.Translate(Days(p.daysToImmune));
+        }
+
+        private static string Days(float days) => Mathf.RoundToInt(days * GenDate.TicksPerDay).ToStringTicksToPeriod();
 
         // Overall armor across body parts, as the vanilla Gear tab calculates it
         private void SetArmor(Pawn pawn, int index, StatDef stat)

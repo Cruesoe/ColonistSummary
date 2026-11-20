@@ -42,6 +42,7 @@ namespace ColonistSummary
             Add(new AgeColumn(), "Age", AgeTex);
             Add(new HostilityColumn(), "Hostility", CoreWidgets.Icon("crosshair"));
             Add(new BleedingColumn(), "Bleeding", BleedingTex);
+            Add(new InfectionColumn(), "Infection", CoreWidgets.Icon("virus"));
             foreach (SkillDef skill in DefDatabase<SkillDef>.AllDefs.OrderByDescending(s => s.listOrder))
             {
                 SkillColumn column = new SkillColumn(skill) { icon = SkillTex };

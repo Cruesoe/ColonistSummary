@@ -49,6 +49,16 @@
   <ColonistSummary_Column_HostilityTip>What each colonist does when enemies come near. Click to change it.</ColonistSummary_Column_HostilityTip>
   <ColonistSummary_Column_Bleeding>Bleeding</ColonistSummary_Column_Bleeding>
   <ColonistSummary_Column_BleedingTip>Red shows the time until death by blood loss; yellow shows the bleed rate per day when there's no risk of bleeding out soon.</ColonistSummary_Column_BleedingTip>
+  <ColonistSummary_Column_Infection>Infection</ColonistSummary_Column_Infection>
+  <ColonistSummary_Column_InfectionTip>Infections and other diseases the body builds immunity to, such as flu, plague and malaria. Green while immunity is winning, red while the disease is. With more than one, the cell shows the worst.</ColonistSummary_Column_InfectionTip>
+  <ColonistSummary_InfectionMore>{0} +{1}</ColonistSummary_InfectionMore>
+  <ColonistSummary_InfectionLevels>Immunity {0}, severity {1}</ColonistSummary_InfectionLevels>
+  <ColonistSummary_InfectionWinning>Immunity is winning: immune in {0}.</ColonistSummary_InfectionWinning>
+  <ColonistSummary_InfectionClose>Immunity is winning, but only just: immune in {0}.</ColonistSummary_InfectionClose>
+  <ColonistSummary_InfectionSafe>Immunity is winning: the disease isn't getting worse.</ColonistSummary_InfectionSafe>
+  <ColonistSummary_InfectionLosing>The disease is winning: fatal in {0}, before immunity.</ColonistSummary_InfectionLosing>
+  <ColonistSummary_InfectionNeedsTending>Needs tending.</ColonistSummary_InfectionNeedsTending>
+  <ColonistSummary_InfectionKeepTended>Keep it tended: untended, the disease would win.</ColonistSummary_InfectionKeepTended>
   <ColonistSummary_Column_Weapon>Weapon</ColonistSummary_Column_Weapon>
   <ColonistSummary_Column_WeaponTip>Equipped weapons. Click one to open its info card.</ColonistSummary_Column_WeaponTip>
   <ColonistSummary_Column_Apparel>Apparel</ColonistSummary_Column_Apparel>
