@@ -16,14 +16,6 @@
     <headerTip>Bleeding. Red shows the time until death by blood loss; yellow shows the bleed rate per day when there's no risk of bleeding out soon.</headerTip>
   </PawnColumnDef>
 
-  <PawnColumnDef>
-    <defName>ColonySummary_Tend</defName>
-    <label>tend</label>
-    <workerClass>ColonySummary.PawnColumnWorker_Tend</workerClass>
-    <sortable>true</sortable>
-    <headerTip>Conditions that need tending now.</headerTip>
-  </PawnColumnDef>
-
   <!-- Replaced at startup by one column per skill (SkillColumnGenerator) -->
   <PawnColumnDef>
     <defName>ColonySummary_Skills</defName>

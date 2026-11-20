@@ -38,9 +38,6 @@ namespace ColonySummary
         public string bleedText = "";
         public string bleedTip = "";
         public bool bleedLethal;
-        public int tendCount;
-        public string tendText = "";
-        public string tendTip = "";
 
         private static readonly List<Apparel> tmpApparel = new List<Apparel>();
 
@@ -154,19 +151,6 @@ namespace ColonySummary
                 }
                 bleedTip = tip;
             }
-
-            StringBuilder sb = new StringBuilder();
-            tendCount = 0;
-            for (int i = 0; i < hediffs.Count; i++)
-            {
-                if (!hediffs[i].TendableNow()) continue;
-                if (tendCount > 0) sb.AppendLine();
-                sb.Append(hediffs[i].LabelCap);
-                if (hediffs[i].Part != null) sb.Append(" (").Append(hediffs[i].Part.LabelCap).Append(")");
-                tendCount++;
-            }
-            tendText = tendCount > 0 ? tendCount.ToStringCached() : "";
-            tendTip = sb.ToString();
         }
 
         // Overall armor across body parts, as the vanilla Gear tab calculates it

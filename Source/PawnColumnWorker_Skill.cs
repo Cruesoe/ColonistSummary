@@ -5,23 +5,27 @@ using Verse.Sound;
 
 namespace ColonySummary
 {
-    // One skill as on the Bio tab: level, passion and a level bar, with the Bio tab's tooltip
+    // One skill in a Work tab style box shaded by level, with its passion and the Bio tab's tooltip
     [StaticConstructorOnStartup]
     public class PawnColumnWorker_Skill : PawnColumnWorker
     {
         // Size of the Work tab's priority box
         private const float BoxSize = 25f;
 
-        private static readonly Texture2D BarTex = SolidColorMaterials.NewSolidColorTexture(new Color(1f, 1f, 1f, 0.1f));
         private static readonly Texture2D SortingTex = ContentFinder<Texture2D>.Get("UI/Icons/Sorting");
         private static readonly Texture2D SortingDescendingTex = ContentFinder<Texture2D>.Get("UI/Icons/SortingDescending");
         private static readonly Color DisabledColor = new Color(1f, 1f, 1f, 0.5f);
 
-        // Header height that fits the longest skill label when inclined; session lifetime, from defs only
-        private static int headerHeight;
+        // Vanilla Work tab header height with horizontal labels
+        private const int HorizontalHeaderHeight = 50;
+
+        // Header height that fits the longest skill label when rotated, as Division of Labor sizes Work tab headers; session lifetime, from defs only
+        private static int rotatedHeaderHeight;
 
         private string? label;
-        private float labelHeight;
+        private Vector2 labelSize;
+        private string? stacked;
+        private Vector2 stackedSize;
 
         private SkillColumnDef Def => (SkillColumnDef)def;
 
@@ -33,93 +37,188 @@ namespace ColonySummary
                 {
                     label = Def.skill!.skillLabel.CapitalizeFirst();
                     Text.Font = GameFont.Small;
-                    labelHeight = Text.CalcSize(label).y;
+                    labelSize = Text.CalcSize(label);
+                    // First four letters top to bottom, with a dot when the label is cut short
+                    stacked = string.Join("\n", label.Substring(0, Mathf.Min(4, label.Length)).ToCharArray());
+                    if (label.Length > 4) stacked += ".";
+                    stackedSize = Text.CalcSize(stacked) * 1.1f;
                 }
                 return label;
             }
         }
 
-        // Inclined label like Division of Labor's Work tab; clicks and hover are tested in the label's rotated space
+        // Header in the chosen orientation, matching Division of Labor's Work tab; rotated labels are hit-tested in their own space
         public override void DoHeader(Rect rect, PawnTable table)
         {
+            HeaderOrientation orientation = ColonySummarySettings.HeaderOrientation;
+            string text = Label;
+            if (orientation == HeaderOrientation.Horizontal)
+            {
+                DoHorizontalHeader(rect, table, text);
+                return;
+            }
+
+            bool vertical = orientation != HeaderOrientation.Inclined;
             if (table.SortingBy == def)
             {
                 Texture2D tex = table.SortingDescending ? SortingDescendingTex : SortingTex;
-                GUI.DrawTexture(new Rect(rect.center.x - tex.width / 2f, rect.yMax - tex.height, tex.width, tex.height), tex);
+                Rect sortingRect = vertical
+                    ? new Rect(rect.xMax - tex.width - 1f, rect.yMax - tex.height - 1f, tex.width, tex.height)
+                    : new Rect(rect.center.x - tex.width / 2f, rect.yMax - tex.height, tex.width, tex.height);
+                GUI.DrawTexture(sortingRect, tex);
             }
-
-            string text = Label;
-            (Rect labelRect, Matrix4x4 labelMatrix) = InclinedLabel.Draw(rect, text, labelHeight);
 
             Matrix4x4 originalMatrix = GUI.matrix;
+            Rect labelRect;
+            Matrix4x4 labelMatrix;
+            switch (orientation)
+            {
+                case HeaderOrientation.Inclined:
+                    (labelRect, labelMatrix) = HeaderLabel.DrawInclined(rect, text, labelSize.y);
+                    break;
+                case HeaderOrientation.Vertical:
+                    (labelRect, labelMatrix) = HeaderLabel.DrawVertical(rect, text);
+                    break;
+                default:
+                    labelRect = HeaderLabel.DrawStacked(rect, stacked!, stackedSize);
+                    labelMatrix = originalMatrix;
+                    break;
+            }
+
             GUI.matrix = labelMatrix;
             bool mouseOver = labelRect.Contains(Event.current.mousePosition);
-            if (mouseOver) Widgets.DrawHighlight(labelRect);
             bool clicked = Widgets.ButtonInvisible(labelRect);
+            if (mouseOver && !vertical) Widgets.DrawHighlight(labelRect);
             GUI.matrix = originalMatrix;
 
+            if (mouseOver && vertical) Widgets.DrawHighlight(rect);
             if (clicked) HeaderClicked(rect, table);
-            if (mouseOver)
+            MouseoverSounds.DoRegion(rect);
+            if (mouseOver) TooltipHandler.TipRegion(new Rect(0f, 0f, UI.screenWidth, UI.screenHeight), GetHeaderTip(table));
+        }
+
+        // Vanilla Work tab header: centered label, every other column moved down, with a line down to the cells
+        private void DoHorizontalHeader(Rect rect, PawnTable table, string text)
+        {
+            float top = rect.yMax - HorizontalHeaderHeight;
+            Rect labelRect = new Rect(rect.center.x - labelSize.x / 2f, top, labelSize.x, labelSize.y);
+            if (Def.moveLabelDown) labelRect.y += 20f;
+
+            if (table.SortingBy == def)
             {
-                MouseoverSounds.DoRegion(rect);
-                TooltipHandler.TipRegion(new Rect(0f, 0f, UI.screenWidth, UI.screenHeight), GetHeaderTip(table));
+                Texture2D tex = table.SortingDescending ? SortingDescendingTex : SortingTex;
+                GUI.DrawTexture(new Rect(rect.xMax - tex.width - 1f, rect.yMax - tex.height - 1f, tex.width, tex.height), tex);
             }
+
+            MouseoverSounds.DoRegion(labelRect);
+            Text.Font = GameFont.Small;
+            Text.Anchor = TextAnchor.MiddleCenter;
+            Widgets.Label(labelRect, text);
+            Text.Anchor = TextAnchor.UpperLeft;
+            GUI.color = new Color(1f, 1f, 1f, 0.3f);
+            Widgets.DrawLineVertical(labelRect.center.x, labelRect.yMax - 3f, top + HorizontalHeaderHeight - labelRect.yMax + 3f);
+            Widgets.DrawLineVertical(labelRect.center.x + 1f, labelRect.yMax - 3f, top + HorizontalHeaderHeight - labelRect.yMax + 3f);
+            GUI.color = Color.white;
+
+            if (Mouse.IsOver(labelRect))
+            {
+                Widgets.DrawHighlight(labelRect);
+                TooltipHandler.TipRegion(labelRect, GetHeaderTip(table));
+            }
+            if (Widgets.ButtonInvisible(labelRect)) HeaderClicked(rect, table);
         }
 
         public override int GetMinHeaderHeight(PawnTable table)
         {
-            if (headerHeight == 0)
+            if (ColonySummarySettings.HeaderOrientation == HeaderOrientation.Horizontal)
+            {
+                return Mathf.Max(base.GetMinHeaderHeight(table), HorizontalHeaderHeight);
+            }
+            if (rotatedHeaderHeight == 0)
             {
                 float longest = 0f;
                 Text.Font = GameFont.Small;
                 foreach (SkillDef skill in DefDatabase<SkillDef>.AllDefs)
                 {
-                    longest = Mathf.Max(longest, Text.CalcSize(skill.skillLabel.CapitalizeFirst()).x);
+                    longest = Mathf.Max(longest, Text.CalcSize(skill.skillLabel.CapitalizeFirst()).x + GenUI.GapTiny * 2f);
                 }
-                headerHeight = Mathf.CeilToInt(InclinedLabel.HeaderHeightFor(longest));
+                rotatedHeaderHeight = Mathf.CeilToInt(longest + GenUI.GapTiny);
             }
-            return Mathf.Max(base.GetMinHeaderHeight(table), headerHeight);
+            return Mathf.Max(base.GetMinHeaderHeight(table), rotatedHeaderHeight);
         }
 
         public override void DoCell(Rect rect, Pawn pawn, PawnTable table)
         {
             SkillRecord? skill = pawn.skills?.GetSkill(Def.skill);
             if (skill == null) return;
-            Rect inner = rect.ContractedBy(1f, 3f);
-            if (Mouse.IsOver(inner))
+            // Work tab priority box, centered in the cell
+            Rect box = new Rect(rect.x + (rect.width - BoxSize) / 2f, rect.center.y - BoxSize / 2f, BoxSize, BoxSize);
+            if (Mouse.IsOver(box))
             {
-                Widgets.DrawHighlight(inner);
-                TooltipHandler.TipRegion(inner, new TipSignal(SkillTooltip.Get(pawn, skill), Def.skill!.GetHashCode() * 397945));
+                TooltipHandler.TipRegion(box, new TipSignal(SkillTooltip.Get(pawn, skill), Def.skill!.GetHashCode() * 397945));
             }
-            Text.Font = GameFont.Small;
             Text.Anchor = TextAnchor.MiddleCenter;
             if (skill.TotallyDisabled)
             {
+                Text.Font = GameFont.Small;
                 GUI.color = DisabledColor;
-                Widgets.Label(inner, "-");
+                Widgets.Label(box, "-");
             }
             else
             {
                 int level = skill.GetLevel();
-                Widgets.FillableBar(inner, Mathf.Max(0.01f, level / 20f), BarTex, null, false);
-                // Grey flame in the bottom-right quarter of a box around the number, behind it, as on the Work tab
-                if (skill.passion != Passion.None)
-                {
-                    Rect box = new Rect(inner.center.x - BoxSize / 2f, inner.center.y - BoxSize / 2f, BoxSize, BoxSize);
-                    Rect icon = new Rect(box.center.x, box.center.y, BoxSize / 2f, BoxSize / 2f);
-                    GUI.DrawTexture(icon, skill.passion == Passion.Major ? WidgetsWork.PassionWorkboxMajorIcon : WidgetsWork.PassionWorkboxMinorIcon);
-                }
-                Widgets.Label(inner, level.ToStringCached());
+                DrawBoxBackground(box, level, skill.passion);
+                Text.Font = GameFont.Medium;
+                Widgets.Label(box.ContractedBy(-3f), level.ToStringCached());
+                Text.Font = GameFont.Small;
             }
             GUI.color = Color.white;
             Text.Anchor = TextAnchor.UpperLeft;
         }
 
-        public override int GetMinWidth(PawnTable table) => Mathf.Max(base.GetMinWidth(table), 40);
+        // Work tab box shading by level (awful below 4, bad to 14, mid to excellent at 20) and its grey passion flame at 40% opacity
+        private static void DrawBoxBackground(Rect box, int level, Passion passion)
+        {
+            Texture2D lower;
+            Texture2D upper;
+            float blend;
+            if (level < 4)
+            {
+                lower = WidgetsWork.WorkBoxBGTex_Awful;
+                upper = WidgetsWork.WorkBoxBGTex_Bad;
+                blend = level / 4f;
+            }
+            else if (level <= 14)
+            {
+                lower = WidgetsWork.WorkBoxBGTex_Bad;
+                upper = WidgetsWork.WorkBoxBGTex_Mid;
+                blend = (level - 4) / 10f;
+            }
+            else
+            {
+                lower = WidgetsWork.WorkBoxBGTex_Mid;
+                upper = WidgetsWork.WorkBoxBGTex_Excellent;
+                blend = (level - 14) / 6f;
+            }
+            GUI.color = Color.white;
+            GUI.DrawTexture(box, lower);
+            GUI.color = new Color(1f, 1f, 1f, blend);
+            GUI.DrawTexture(box, upper);
+            if (passion != Passion.None)
+            {
+                GUI.color = new Color(1f, 1f, 1f, 0.4f);
+                Rect icon = new Rect(box.center.x, box.center.y, box.width / 2f, box.height / 2f);
+                GUI.DrawTexture(icon, passion == Passion.Major ? WidgetsWork.PassionWorkboxMajorIcon : WidgetsWork.PassionWorkboxMinorIcon);
+            }
+            GUI.color = Color.white;
+        }
 
-        public override int GetOptimalWidth(PawnTable table) => Mathf.Max(GetMinWidth(table), 46);
+        // Work tab priority column widths (32 min, 39 optimal), capped at 39 so spare table width doesn't widen them
+        public override int GetMinWidth(PawnTable table) => Mathf.Max(base.GetMinWidth(table), 32);
 
-        public override int GetMaxWidth(PawnTable table) => Mathf.Max(GetMinWidth(table), 60);
+        public override int GetOptimalWidth(PawnTable table) => 39;
+
+        public override int GetMaxWidth(PawnTable table) => 39;
 
         // Disabled skills sort lowest; equal levels sort by passion
         public override int Compare(Pawn a, Pawn b) => SortValue(a).CompareTo(SortValue(b));

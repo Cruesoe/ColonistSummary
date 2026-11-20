@@ -6,5 +6,8 @@ namespace ColonySummary
     public class SkillColumnDef : PawnColumnDef
     {
         public SkillDef? skill;
+
+        // With horizontal headers, every other label sits lower, as on the vanilla Work tab
+        public bool moveLabelDown;
     }
 }

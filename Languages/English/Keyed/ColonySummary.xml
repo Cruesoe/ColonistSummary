@@ -2,4 +2,17 @@
 <LanguageData>
   <ColonySummary_ClickForInfo>Click for more information.</ColonySummary_ClickForInfo>
   <ColonySummary_CurrentTemperature>Current temperature: {0}</ColonySummary_CurrentTemperature>
+  <ColonySummary_OpenSettings>Colony Summary settings</ColonySummary_OpenSettings>
+  <ColonySummary_SectionSummaryTab>Summary tab</ColonySummary_SectionSummaryTab>
+  <ColonySummary_ResetAll>Reset to defaults</ColonySummary_ResetAll>
+  <ColonySummary_HeaderOrientation>Skill column headers</ColonySummary_HeaderOrientation>
+  <ColonySummary_HeaderOrientationTip>How the skill names above each column are drawn.</ColonySummary_HeaderOrientationTip>
+  <ColonySummary_HeaderInclined>Inclined</ColonySummary_HeaderInclined>
+  <ColonySummary_HeaderInclinedTip>Tilts the headers so narrow columns stay readable.</ColonySummary_HeaderInclinedTip>
+  <ColonySummary_HeaderVertical>Vertical</ColonySummary_HeaderVertical>
+  <ColonySummary_HeaderVerticalTip>Turns the headers on their side, for the narrowest columns.</ColonySummary_HeaderVerticalTip>
+  <ColonySummary_HeaderStacked>Stacked</ColonySummary_HeaderStacked>
+  <ColonySummary_HeaderStackedTip>Stacks the first letters of each header top to bottom. Suits languages with fixed-width characters, such as Chinese.</ColonySummary_HeaderStackedTip>
+  <ColonySummary_HeaderHorizontal>Horizontal</ColonySummary_HeaderHorizontal>
+  <ColonySummary_HeaderHorizontalTip>Draws the headers as the vanilla Work tab does, every other one lower.</ColonySummary_HeaderHorizontalTip>
 </LanguageData>
