@@ -1,21 +1,32 @@
-[b]Adds a Summary tab that shows every colonist's gear in one table.[/b]
+[b]Adds a Summary tab that shows every colonist on one row: health, skills, gear and protection.[/b]
 
-See at a glance who's carrying what, who's under-armored and who needs warmer clothes, without clicking through each colonist's Gear tab. It looks and works like the vanilla Assign and Animals tabs.
+See at a glance who's bleeding out, who's best at what and who's under-armored, without clicking through each colonist's tabs. It's built on [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3832843406]UI Rethemed - Core[/url] and matches the look of the UI Rethemed tabs.
 
 [h2]Features[/h2]
 [list]
-[*][b]Gear:[/b] Each colonist's weapon, worn apparel and inventory are shown as icons, with stack counts.
-[*][b]Condition:[/b] Damaged items show a condition bar, in red below half.
-[*][b]Details:[/b] Hover over an item to see its name, quality and condition, and click it to open its info card.
-[*][b]Protection:[/b] Overall sharp, blunt and heat armor, calculated the same way as the Gear tab.
-[*][b]Comfort:[/b] Each colonist's comfortable temperature range.
-[*][b]Mass:[/b] Mass carried out of carrying capacity, in red when over capacity.
-[*][b]Sorting:[/b] Click a column header to sort by it. Click a colonist's name to jump to them.
+[*][b]Title bar:[/b] Counts your colonists, those bleeding and those outside their comfortable temperature, with a search by name, weapon or apparel and a sort menu.
+[*][b]Ideoligion and xenotype:[/b] Their icons, when Ideology or Biotech is active. Click an ideoligion to open it.
+[*][b]Age:[/b] Each colonist's biological age. Hover for the full age.
+[*][b]Fight or flee:[/b] The vanilla hostility response button, changeable right in the table.
+[*][b]Bleeding:[/b] A beating heart with the time until death by blood loss, in red within half a day and yellow within a day, or the bleed rate in green when there's no risk of bleeding out soon. Hover for the blood left and each bleeding wound.
+[*][b]Infection:[/b] The worst infection or other disease a colonist is building immunity to, in green while immunity is winning, yellow when only just, and red while the disease is. Hover for each disease's immunity and severity and how long until immunity or death.
+[*][b]Skills:[/b] Every skill, in the Bio tab's order, in a box tinted by level, with its passion. Hover for the skill card. Skills added by other mods get their own columns. The headings follow the header style set in UI Rethemed - Work: classic, slanted, vertical or icons.
+[*][b]Gear:[/b] Weapon and worn apparel as item slots. Damaged items show a condition bar, in red below half. Hover for the name, and click to open the info card.
+[*][b]Protection:[/b] Overall sharp, blunt and heat armor with a bar that fills at 100%, calculated the same way as the Gear tab.
+[*][b]Comfort:[/b] Each colonist's comfortable temperature range, in green while they're comfortable where they are. Hover for the current temperature.
+[*][b]Sorting:[/b] Click a column heading to sort by it, or pick any column in the sort menu. Click a colonist's name to jump to them.
 [*][b]Everyone:[/b] Colonists in caravans and transporters are listed too.
 [/list]
 
+[h2]Settings[/h2]
+[list]
+[*][b]Window size[/b]: fit the tab to the screen width or height, or scale it from 70% to 130% of its usual width and 80% to 120% of its usual height, as on the other UI Rethemed tabs.
+[*][b]Height fits the colonists[/b]: the tab is only as tall as its colonists need, growing as they join, up to the height above. On by default.
+[/list]
+
 [h2]Compatibility[/h2]
+Requires [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3832843406]UI Rethemed - Core[/url].
 Safe to add to or remove from an existing save.
 
 [h2]Credits[/h2]
-Thanks to [b]Dubs Mint Menus[/b] by Dubwise, whose gear screen inspired this tab.
+Thanks to [b]Dubs Mint Menus[/b] by Dubwise, whose gear screen inspired this tab, and to [b]Lazy Friday Studio[/b] for UI Rethemed and permission to build on it.
