@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UIRethemed.Core;
 using UnityEngine;
 using Verse;
@@ -21,14 +22,24 @@ namespace ColonySummary
         // Window lifetime: read when the window opens
         public static SkillHeaderStyle style;
         private static float longestLabel;
+        private static float lastOverhang;
 
         public static void Opened()
         {
             style = WorkHeaderStyle.Read();
             longestLabel = 0f;
-            for (int i = 0; i < SummaryColumns.Skills.Count; i++)
+            List<SkillColumn> skills = SummaryColumns.Skills;
+            for (int i = 0; i < skills.Count; i++)
             {
-                longestLabel = Mathf.Max(longestLabel, CoreWidgets.Width(SummaryColumns.Skills[i].label) + 6f);
+                longestLabel = Mathf.Max(longestLabel, CoreWidgets.Width(skills[i].label) + 6f);
+            }
+            // How far the last classic label reaches past its column
+            lastOverhang = 0f;
+            if (skills.Count > 0)
+            {
+                SkillColumn last = skills[skills.Count - 1];
+                float width = Mathf.Min(CoreWidgets.Width(last.label) + 4f, last.width * 2f - 4f);
+                lastOverhang = Mathf.Max(0f, Mathf.Ceil((width - last.width) / 2f));
             }
         }
 
@@ -47,8 +58,10 @@ namespace ColonySummary
             }
         }
 
-        // Room the slanted labels lean into after the last skill column
-        public static float TrailingGap => style == SkillHeaderStyle.Slanted ? 16f : 0f;
+        // Space between the skill block and the next column, clear of the last classic label
+        public static float TrailingGap => BlockGap + (style == SkillHeaderStyle.Classic ? lastOverhang : 0f);
+
+        private const float BlockGap = 16f;
 
         // Returns true when clicked
         public static bool Draw(Rect cell, int index, SkillColumn column, bool sorted, bool descending)

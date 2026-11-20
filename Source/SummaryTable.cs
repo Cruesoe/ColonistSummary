@@ -88,7 +88,13 @@ namespace ColonySummary
                     if (column is SkillColumn)
                     {
                         skill++;
-                        if (i + 1 >= columns.Count || !(columns[i + 1] is SkillColumn)) x += SkillHeader.TrailingGap;
+                        if (i + 1 >= columns.Count || !(columns[i + 1] is SkillColumn))
+                        {
+                            // Divider between the skill block and the next column
+                            float gap = SkillHeader.TrailingGap;
+                            Theme.Fill(new Rect(Mathf.Round(x + column.width + gap / 2f), 8f, 1f, rect.height - 16f), Faces.Fade(Theme.BGLight, 0.9f));
+                            x += gap;
+                        }
                     }
                     x += column.width;
                 }
