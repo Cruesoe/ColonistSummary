@@ -17,10 +17,8 @@ See at a glance who's bleeding out, who's best at what and who's under-armored, 
 [*][b]Everyone:[/b] Colonists in caravans and transporters are listed too.
 [/list]
 
-[h2]Requirements[/h2]
-[url=https://steamcommunity.com/sharedfiles/filedetails/?id=3832843406]UI Rethemed - Core[/url].
-
 [h2]Compatibility[/h2]
+Requires [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3832843406]UI Rethemed - Core[/url].
 Safe to add to or remove from an existing save.
 
 [h2]Credits[/h2]

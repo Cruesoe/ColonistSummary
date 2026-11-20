@@ -5,11 +5,11 @@ using Verse;
 
 namespace ColonistSummary
 {
-    // Listed colonists, the search, sorting and summary counts; rows are rebuilt once a game second and when the search or sort changes.
+    // Listed colonists, the search, sorting and summary counts; rows are rebuilt once a real second while the game runs and when the search or sort changes.
     // Lifetime: the Summary window (Clear on open and close); the sort choice lasts for the session.
     public static class SummaryData
     {
-        private const int RefreshTicks = 60;
+        private const float RefreshSeconds = 1f;
 
         public static readonly List<PawnSummary> all = new List<PawnSummary>();
         public static readonly List<PawnSummary> shown = new List<PawnSummary>();
@@ -30,6 +30,7 @@ namespace ColonistSummary
         private static readonly List<Pawn> tmpPawns = new List<Pawn>();
         private static readonly System.Comparison<PawnSummary> comparison = CompareRows;
         private static int builtTick = int.MinValue;
+        private static float builtAt;
         private static bool dirty = true;
 
         public static void SetDirty() => dirty = true;
@@ -42,15 +43,19 @@ namespace ColonistSummary
             search = "";
             dirty = true;
             builtTick = int.MinValue;
+            builtAt = 0f;
             SummaryCache.Clear();
         }
 
+        // Rebuilds when asked to, otherwise at most once a real second while the game runs, whatever its speed
         public static void Refresh()
         {
             int now = Find.TickManager.TicksGame;
-            if (!dirty && now - builtTick < RefreshTicks && now >= builtTick) return;
+            float realNow = ThemeMotion.Now;
+            if (!dirty && (now == builtTick || realNow - builtAt < RefreshSeconds)) return;
             dirty = false;
             builtTick = now;
+            builtAt = realNow;
             Rebuild();
         }
 

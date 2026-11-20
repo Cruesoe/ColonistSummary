@@ -19,7 +19,7 @@ namespace ColonistSummary
         {
             string text = CellText(row);
             if (text.Length == 0) return;
-            CoreWidgets.Line(CoreWidgets.Dropped(rect), text, CellColor(row), GameFont.Small, TextAnchor.MiddleCenter);
+            CoreWidgets.Line(rect, text, CellColor(row), GameFont.Small, TextAnchor.MiddleCenter);
             string cellTip = CellTip(row);
             if (cellTip.Length > 0) CoreWidgets.Tip(rect, label, cellTip);
         }

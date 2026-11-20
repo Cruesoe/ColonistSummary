@@ -20,7 +20,7 @@ namespace ColonistSummary
         public override void Cell(Rect rect, PawnSummary row)
         {
             Rect text = new Rect(rect.x, rect.y + 2f, rect.width, rect.height - GaugeHeight - 6f);
-            CoreWidgets.Line(CoreWidgets.Dropped(text), row.armorText[index], Theme.TextBright, GameFont.Small, TextAnchor.MiddleCenter);
+            CoreWidgets.Line(text, row.armorText[index], Theme.TextBright, GameFont.Small, TextAnchor.MiddleCenter);
             Rect gauge = new Rect(rect.x + 8f, rect.yMax - GaugeHeight - 5f, rect.width - 16f, GaugeHeight);
             CoreWidgets.Gauge(gauge, row.armor[index], Theme.HighlightBlue);
             CoreWidgets.Tip(rect, label, tip);

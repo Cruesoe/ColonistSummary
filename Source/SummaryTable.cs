@@ -154,13 +154,27 @@ namespace ColonistSummary
             List<SummaryColumn> columns = SummaryData.columns;
             float x = NameWidth;
             float pinEdge = scroll.x + NameWidth;
-            for (int i = 0; i < columns.Count; i++)
+            // Cells under the pinned name or outside the scroll view still draw but take no hover or clicks
+            bool live = InView && Event.current.mousePosition.x >= pinEdge;
+            if (live || Event.current.type == EventType.Repaint)
             {
-                SummaryColumn column = columns[i];
-                Rect cell = new Rect(x, row.y, column.width, row.height);
-                if (cell.xMax > pinEdge && cell.x < scroll.x + viewport.width) column.Cell(cell, summary);
-                if (column is SkillColumn && (i + 1 >= columns.Count || !(columns[i + 1] is SkillColumn))) x += SkillHeader.TrailingGap;
-                x += column.width;
+                bool held = CoreWidgets.HoldTips;
+                if (!live) CoreWidgets.HoldTips = true;
+                try
+                {
+                    for (int i = 0; i < columns.Count; i++)
+                    {
+                        SummaryColumn column = columns[i];
+                        Rect cell = new Rect(x, row.y, column.width, row.height);
+                        if (cell.xMax > pinEdge && cell.x < scroll.x + viewport.width) column.Cell(cell, summary);
+                        if (column is SkillColumn && (i + 1 >= columns.Count || !(columns[i + 1] is SkillColumn))) x += SkillHeader.TrailingGap;
+                        x += column.width;
+                    }
+                }
+                finally
+                {
+                    CoreWidgets.HoldTips = held;
+                }
             }
 
             Rect name = new Rect(scroll.x, row.y, NameWidth, row.height);
@@ -192,7 +206,7 @@ namespace ColonistSummary
             Rect label = new Rect(portrait.xMax + 8f, cell.y, cell.xMax - portrait.xMax - 14f, cell.height);
             bool over = Mouse.IsOver(cell) && InView;
             float hover = ThemeMotion.Hover(cell, NameSalt, over);
-            CoreWidgets.Line(CoreWidgets.Dropped(label), summary.name, Color.Lerp(Theme.TextBright, Color.white, hover), GameFont.Small, TextAnchor.MiddleLeft);
+            CoreWidgets.Line(label, summary.name, Color.Lerp(Theme.TextBright, Color.white, hover), GameFont.Small, TextAnchor.MiddleLeft);
             if (!over) return;
             CoreWidgets.Tip(cell, summary.name, rowTip);
             if (Widgets.ButtonInvisible(cell))

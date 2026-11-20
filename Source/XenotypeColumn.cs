@@ -13,6 +13,7 @@ namespace ColonistSummary
         public XenotypeColumn()
         {
             width = 34f;
+            startsDescending = false;
         }
 
         public override bool Visible => ModsConfig.BiotechActive;

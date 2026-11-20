@@ -20,7 +20,7 @@ namespace ColonistSummary
             Rect heart = new Rect(rect.x + 6f, Mathf.Round(rect.center.y - HeartSize / 2f), HeartSize, HeartSize);
             CoreWidgets.BleedingHeart(heart, row.bloodLeft, row.bleedRate, true);
             Rect text = new Rect(heart.xMax + 4f, rect.y, rect.xMax - heart.xMax - 6f, rect.height);
-            CoreWidgets.Line(CoreWidgets.Dropped(text), row.bleedText, row.bleedLethal ? Theme.TextRed : Theme.TextYellow, GameFont.Small, TextAnchor.MiddleLeft);
+            CoreWidgets.Line(text, row.bleedText, row.bleedLethal ? Theme.TextRed : Theme.TextYellow, GameFont.Small, TextAnchor.MiddleLeft);
             CoreWidgets.Tip(rect, label, row.bleedTip, null, row.bleedLethal ? Theme.HighlightRed : Theme.HighlightYellow);
         }
 

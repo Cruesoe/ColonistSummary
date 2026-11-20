@@ -13,6 +13,7 @@ namespace ColonistSummary
         public IdeoColumn()
         {
             width = 34f;
+            startsDescending = false;
         }
 
         public override bool Visible => ModsConfig.IdeologyActive && !Find.IdeoManager.classicMode;

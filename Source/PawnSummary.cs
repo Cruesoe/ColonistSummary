@@ -23,8 +23,6 @@ namespace ColonistSummary
         public int signature;
         public readonly List<GearItem> weapons = new List<GearItem>();
         public readonly List<GearItem> apparel = new List<GearItem>();
-        public string weaponsTip = "";
-        public string apparelTip = "";
         public string? weaponLabel;
 
         public readonly float[] armor = new float[3];
@@ -49,7 +47,14 @@ namespace ColonistSummary
         public float bloodLeft = 1f;
         public string ideoTip = "";
         public string xenotypeTip = "";
+        // What the cached tips and armor were built from
+        private Ideo? tipIdeo;
+        private string? tipIdeoName;
+        private object? tipXenotype = Unbuilt;
+        private int armorSignature;
+        private int armorHediffCount = -1;
 
+        private static readonly object Unbuilt = new object();
         private static readonly List<Apparel> tmpApparel = new List<Apparel>();
         private static readonly StringBuilder searchBuilder = new StringBuilder();
 
@@ -110,8 +115,6 @@ namespace ColonistSummary
                 tmpApparel.Clear();
             }
 
-            weaponsTip = ListTip(weapons);
-            apparelTip = ListTip(apparel);
             statsTick = int.MinValue;
             RebuildSearch();
         }
@@ -141,12 +144,29 @@ namespace ColonistSummary
                 name = newName;
                 RebuildSearch();
             }
-            ideoTip = pawn.Ideo != null ? pawn.Ideo.name + "\n\n" + "ClickForMoreInfo".Translate() : "";
-            xenotypeTip = pawn.genes != null ? pawn.genes.XenotypeLabelCap.ToString() : "";
+            Ideo? ideo = pawn.Ideo;
+            if (ideo != tipIdeo || (ideo != null && ideo.name != tipIdeoName))
+            {
+                tipIdeo = ideo;
+                tipIdeoName = ideo?.name;
+                ideoTip = ideo != null ? ideo.name + "\n\n" + "ClickForMoreInfo".Translate() : "";
+            }
+            object? xenotype = pawn.genes == null ? null : (object?)pawn.genes.CustomXenotype ?? pawn.genes.Xenotype;
+            if (xenotype != tipXenotype)
+            {
+                tipXenotype = xenotype;
+                xenotypeTip = pawn.genes != null ? pawn.genes.XenotypeLabelCap : "";
+            }
 
-            SetArmor(pawn, 0, StatDefOf.ArmorRating_Sharp);
-            SetArmor(pawn, 1, StatDefOf.ArmorRating_Blunt);
-            SetArmor(pawn, 2, StatDefOf.ArmorRating_Heat);
+            // Armor depends on worn apparel and body armor from health conditions
+            if (signature != armorSignature || hediffs.Count != armorHediffCount)
+            {
+                armorSignature = signature;
+                armorHediffCount = hediffs.Count;
+                SetArmor(pawn, 0, StatDefOf.ArmorRating_Sharp);
+                SetArmor(pawn, 1, StatDefOf.ArmorRating_Blunt);
+                SetArmor(pawn, 2, StatDefOf.ArmorRating_Heat);
+            }
 
             comfyMin = pawn.GetStatValue(StatDefOf.ComfyTemperatureMin);
             float comfyMax = pawn.GetStatValue(StatDefOf.ComfyTemperatureMax);
@@ -227,17 +247,6 @@ namespace ColonistSummary
                 if (forced || locked) sb.AppendLine().AppendLine();
             }
             sb.Append("ColonistSummary_ClickForInfo".Translate());
-            return sb.ToString();
-        }
-
-        private static string ListTip(List<GearItem> items)
-        {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < items.Count; i++)
-            {
-                if (i > 0) sb.AppendLine();
-                sb.Append(items[i].thing.LabelCap);
-            }
             return sb.ToString();
         }
     }

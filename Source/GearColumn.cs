@@ -65,14 +65,14 @@ namespace ColonistSummary
             }
         }
 
-        // Weapons group by primary weapon with the unarmed last; apparel sorts by the number of items worn
+        // Weapons sort A to Z by primary weapon with the unarmed after them; apparel sorts by the number of items worn
         public override int Compare(PawnSummary a, PawnSummary b)
         {
             if (!weapons) return a.apparel.Count.CompareTo(b.apparel.Count);
             string? la = a.weaponLabel;
             string? lb = b.weaponLabel;
-            if (la == null || lb == null) return (lb == null).CompareTo(la == null);
-            return string.Compare(lb, la, System.StringComparison.CurrentCultureIgnoreCase);
+            if (la == null || lb == null) return (la == null).CompareTo(lb == null);
+            return string.Compare(la, lb, System.StringComparison.CurrentCultureIgnoreCase);
         }
     }
 }

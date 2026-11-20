@@ -31,7 +31,7 @@ namespace ColonistSummary
             if (record.TotallyDisabled)
             {
                 Rounded.Fill(box, Faces.Fade(Theme.BGDark, 0.6f));
-                CoreWidgets.Line(CoreWidgets.Dropped(box), "-", Theme.TextFaint, GameFont.Small, TextAnchor.MiddleCenter);
+                CoreWidgets.Line(box, "-", Theme.TextFaint, GameFont.Small, TextAnchor.MiddleCenter);
             }
             else
             {
@@ -39,14 +39,14 @@ namespace ColonistSummary
                 Color color = SkillRow.LevelColor(level);
                 Rounded.Fill(box, Color.Lerp(Theme.BG, color, 0.15f + 0.35f * Mathf.Clamp01(level / MaxLevel)));
                 Rounded.Border(box, Color.Lerp(Faces.Fade(color, 0.6f), Color.white, 0.5f * hover));
-                CoreWidgets.Line(CoreWidgets.Dropped(box), level.ToStringCached(), Theme.TextBright, GameFont.Small, TextAnchor.MiddleCenter);
+                CoreWidgets.Line(box, level.ToStringCached(), Theme.TextBright, GameFont.Small, TextAnchor.MiddleCenter);
                 if (record.passion != Passion.None)
                 {
                     Texture? passion = PassionLooks.Icon(record.passion);
                     if (passion != null) CoreWidgets.DrawIcon(new Rect(box.xMax - PassionSize + 3f, box.y - 4f, PassionSize, PassionSize), passion);
                 }
             }
-            if (Mouse.IsOver(box)) SkillCard.Region(box, row.pawn.thingIDNumber * 397 + skill.index, record);
+            if (!CoreWidgets.HoldTips && Mouse.IsOver(box)) SkillCard.Region(box, row.pawn.thingIDNumber * 397 + skill.index, record);
         }
 
         // Disabled skills sort lowest; equal levels sort by passion
