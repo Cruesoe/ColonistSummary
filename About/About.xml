@@ -22,7 +22,7 @@
 
 Each row shows a colonist's ideoligion and xenotype (with Ideology or Biotech), age, fight-or-flee setting (changeable right there), bleeding with the time until death, infections (green while immunity is winning, yellow when only just, red while the disease is), every skill with its passion, weapon and worn apparel, overall sharp, blunt and heat armor and comfortable temperature range (green while comfortable).
 
-The title bar counts colonists, the bleeding and the uncomfortable, and has a search by name, weapon or apparel and a sort menu. Hover over anything for details, and click an item to open its info card. Click a column heading to sort by it, and click a colonist's name to jump to them. Skill headings follow the header style set in UI Rethemed - Work. Colonists in caravans and transporters are listed too. The mod settings set the window size as the other UI Rethemed tabs do, and whether its height fits the colonists.
+The title bar counts colonists, the bleeding and the uncomfortable, and has a search by name, weapon or apparel and a sort menu. Hover over anything for details, and click an item to open its info card. Click a column heading to sort by it (a third click returns to the colonist bar's order), and click a colonist's name to jump to them. Skill headings follow the header style set in UI Rethemed - Work. Colonists in caravans and transporters are listed too. The mod settings set the window size as the other UI Rethemed tabs do, and whether its height fits the colonists.
 
 Needs UI Rethemed - Core. Safe to add to or remove from an existing save.</description>
 </ModMetaData>

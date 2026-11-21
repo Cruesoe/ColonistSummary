@@ -26,7 +26,7 @@
   <ColonistSummary_SearchFound>{0} found</ColonistSummary_SearchFound>
 
   <ColonistSummary_SortMenu>Sort colonists</ColonistSummary_SortMenu>
-  <ColonistSummary_SortButtonTip>Sorted by {0}, {1}. Click a column heading to sort by it, or open this menu for every choice.</ColonistSummary_SortButtonTip>
+  <ColonistSummary_SortButtonTip>Sorted by {0}, {1}. Click a column heading to sort by it, again to reverse, and a third time for the usual order, or open this menu for every choice.</ColonistSummary_SortButtonTip>
   <ColonistSummary_Sort_Usual>Usual order</ColonistSummary_Sort_Usual>
   <ColonistSummary_Sort_UsualTip>The colonist bar's order.</ColonistSummary_Sort_UsualTip>
   <ColonistSummary_Name>Name</ColonistSummary_Name>

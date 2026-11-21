@@ -61,7 +61,13 @@ namespace ColonistSummary
 
         public static void SortOn(SummaryColumn column)
         {
-            if (sortBy == column) descending = !descending;
+            // Each heading cycles: its starting direction, reversed, then back to the colonist bar's order
+            if (sortBy == column && column != SummaryColumns.Usual && descending != column.startsDescending)
+            {
+                sortBy = SummaryColumns.Usual;
+                descending = false;
+            }
+            else if (sortBy == column) descending = !descending;
             else
             {
                 sortBy = column;

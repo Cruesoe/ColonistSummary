@@ -14,7 +14,7 @@ See at a glance who's bleeding out, who's best at what and who's under-armored, 
 [*][b]Gear:[/b] Weapon and worn apparel as item slots. Damaged items show a condition bar, in red below half. Hover for the name, and click to open the info card.
 [*][b]Protection:[/b] Overall sharp, blunt and heat armor with a bar that fills at 100%, calculated the same way as the Gear tab.
 [*][b]Comfort:[/b] Each colonist's comfortable temperature range, in green while they're comfortable where they are. Hover for the current temperature.
-[*][b]Sorting:[/b] Click a column heading to sort by it, or pick any column in the sort menu. Click a colonist's name to jump to them.
+[*][b]Sorting:[/b] Click a column heading to sort by it, again to reverse it, and a third time to return to the colonist bar's order, or pick any column in the sort menu. Click a colonist's name to jump to them.
 [*][b]Everyone:[/b] Colonists in caravans and transporters are listed too.
 [/list]
 
