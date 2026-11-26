@@ -97,6 +97,7 @@ namespace ColonistSummary
 
         private static void WindowCard(Listing_Standard listing)
         {
+            Inset(listing);
             ColonistSummarySettings settings = Settings;
             settings.size.DoSettings(listing, tabName, cards);
             SettingsCards.Tick(listing, FitTex, Theme.TextDim, fitLabel, ref settings.fitToColonists, fitTip, true);
@@ -107,10 +108,18 @@ namespace ColonistSummary
             }
         }
 
-        private static void SummaryCard(Listing_Standard listing) => Ticks(listing, SummaryColumns.SummaryChoices);
+        private static void SummaryCard(Listing_Standard listing)
+        {
+            Inset(listing);
+            Ticks(listing, SummaryColumns.SummaryChoices);
+        }
+
+        // Keeps the rows clear of the card body's right edge, which can clip a tick box's border by a pixel
+        private static void Inset(Listing_Standard listing) => listing.ColumnWidth -= 2f;
 
         private static void HealthCard(Listing_Standard listing)
         {
+            Inset(listing);
             ColonistSummarySettings settings = Settings;
             if (SettingsCards.Tick(listing, PrisonerTex, Theme.TextDim, prisonersLabel, ref settings.healthPrisoners, prisonersTip, true)) SummaryData.SetDirty();
             if (SettingsCards.Tick(listing, AnimalTex, Theme.TextDim, animalsLabel, ref settings.healthAnimals, animalsTip, true)) SummaryData.SetDirty();
