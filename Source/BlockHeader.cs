@@ -5,8 +5,8 @@ using Verse;
 
 namespace ColonistSummary
 {
-    // Skill column headings drawn like UI Rethemed - Work's job headings, in the style chosen there
-    public static class SkillHeader
+    // Headings for runs of narrow columns (skills, capacities), drawn like UI Rethemed - Work's job headings in the style chosen there
+    public static class BlockHeader
     {
         private const float LabelRow = 20f;
         private const float LabelFoot = 24f;
@@ -19,34 +19,47 @@ namespace ColonistSummary
         private static readonly float SlantCos = Mathf.Cos(Mathf.PI / 3f);
         private static readonly float SlantTan = Mathf.Tan(Mathf.PI / 3f);
 
-        // Window lifetime: read when the window opens
+        // Window lifetime: the style is read when the window opens, the sizes with each rebuild of the shown columns
         public static SkillHeaderStyle style;
         private static float longestLabel;
         private static float lastOverhang;
+        private static bool anyBlock;
 
         public static void Opened()
         {
             style = WorkHeaderStyle.Read();
             longestLabel = 0f;
-            List<SkillColumn> skills = SummaryColumns.Skills;
-            for (int i = 0; i < skills.Count; i++)
-            {
-                longestLabel = Mathf.Max(longestLabel, CoreWidgets.Width(skills[i].label) + 6f);
-            }
-            // How far the last classic label reaches past its column
             lastOverhang = 0f;
-            if (skills.Count > 0)
+            anyBlock = false;
+        }
+
+        // Sizes the headings for the page's shown columns
+        public static void Measure(List<SummaryColumn> columns)
+        {
+            longestLabel = 0f;
+            lastOverhang = 0f;
+            anyBlock = false;
+            for (int i = 0; i < columns.Count; i++)
             {
-                SkillColumn last = skills[skills.Count - 1];
-                float width = Mathf.Min(CoreWidgets.Width(last.label) + 4f, last.width * 2f - 4f);
-                lastOverhang = Mathf.Max(0f, Mathf.Ceil((width - last.width) / 2f));
+                if (!(columns[i] is BlockColumn block)) continue;
+                anyBlock = true;
+                longestLabel = Mathf.Max(longestLabel, CoreWidgets.Width(block.label) + 6f);
+                if (IsBlockEnd(columns, i))
+                {
+                    // How far a block's last classic label reaches past its column
+                    float width = Mathf.Min(CoreWidgets.Width(block.label) + 4f, block.width * 2f - 4f);
+                    lastOverhang = Mathf.Max(lastOverhang, Mathf.Ceil((width - block.width) / 2f));
+                }
             }
         }
+
+        public static bool IsBlockEnd(List<SummaryColumn> columns, int i) => columns[i] is BlockColumn && (i + 1 >= columns.Count || !(columns[i + 1] is BlockColumn));
 
         public static float Height
         {
             get
             {
+                if (!anyBlock) return 54f;
                 float rotated = Mathf.Clamp(longestLabel, MinRotatedLabel, MaxRotatedLabel);
                 switch (style)
                 {
@@ -58,13 +71,13 @@ namespace ColonistSummary
             }
         }
 
-        // Space between the skill block and the next column, clear of the last classic label
-        public static float TrailingGap => BlockGap + (style == SkillHeaderStyle.Classic ? lastOverhang : 0f);
+        // Space between a block and the next column, clear of the last classic label
+        public static float TrailingGap => !anyBlock ? 0f : BlockGap + (style == SkillHeaderStyle.Classic ? lastOverhang : 0f);
 
         private const float BlockGap = 16f;
 
         // Returns true when clicked
-        public static bool Draw(Rect cell, int index, SkillColumn column, bool sorted, bool descending)
+        public static bool Draw(Rect cell, int index, BlockColumn column, bool sorted, bool descending)
         {
             Rect hit = new Rect(cell.x + 1f, 0f, cell.width - 2f, cell.height);
             Rect label = default;
@@ -140,14 +153,14 @@ namespace ColonistSummary
             }
         }
 
-        private static void IconHeading(Rect cell, SkillColumn column, bool sorted, float lit)
+        private static void IconHeading(Rect cell, BlockColumn column, bool sorted, float lit)
         {
             float size = Mathf.Min(IconSquare, cell.width - 4f);
             Rect square = new Rect(Mathf.Round(cell.center.x - size / 2f), 4f, size, size);
             Rounded.Fill(square, Theme.BG);
             Rounded.Border(square, Color.Lerp(sorted ? Color.white : Theme.BGLight, Color.white, 0.5f * lit));
             GUI.color = sorted ? Color.white : Color.Lerp(Theme.TextDim, Color.white, lit);
-            CoreWidgets.CenteredIcon(square, SkillRow.Icon(column.skill), Mathf.Round(size * 0.65f));
+            CoreWidgets.CenteredIcon(square, column.HeadingIcon, Mathf.Round(size * 0.65f));
             GUI.color = Color.white;
         }
     }

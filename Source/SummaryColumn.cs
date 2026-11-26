@@ -3,7 +3,7 @@ using Verse;
 
 namespace ColonistSummary
 {
-    // One column of the Summary table: heading, cell and sort order; built once per session
+    // One column of a table page: heading, cell and sort order; built once per session
     public abstract class SummaryColumn
     {
         public string label = "";
@@ -12,8 +12,17 @@ namespace ColonistSummary
         public float width;
         // Numbers start sorted high to low
         public bool startsDescending = true;
+        // Stable name, and the name the column-visibility setting uses (a whole block shares one)
+        public string key = "";
+        public string hideKey = "";
 
-        public virtual bool Visible => true;
+        // Whether the game has what the column shows (a DLC, a setting); hidden columns stay available
+        public virtual bool Available => true;
+
+        // The DLC the column needs, for the settings page; null when it needs none or it's active
+        public virtual string? Requirement => null;
+
+        public bool Shown => Available && !ColonistSummaryMod.Settings.IsHidden(hideKey);
 
         // Sets width from the listed rows, after each rebuild
         public virtual void Measure() { }

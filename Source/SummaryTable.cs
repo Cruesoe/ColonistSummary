@@ -29,7 +29,7 @@ namespace ColonistSummary
         private static string? noneShown;
         private static string? rowTip;
 
-        public static float ContentWidth => NameWidth + SummaryData.columnsWidth + SkillHeader.TrailingGap + EndPad;
+        public static float ContentWidth => NameWidth + SummaryData.columnsWidth + BlockHeader.TrailingGap + EndPad;
 
         public static float ContentHeight => SummaryData.shown.Count * (RowHeight + RowGap);
 
@@ -49,7 +49,7 @@ namespace ColonistSummary
             Rect inner = CoreWidgets.Panel(rect, title, SummaryColumns.ColonistsTex, out Rect titleBar, 220f);
             CoreWidgets.Line(new Rect(titleBar.xMax - 220f, titleBar.y, 210f, titleBar.height), SummaryData.countText, Theme.TextDim, GameFont.Small, TextAnchor.MiddleRight);
 
-            Rect header = new Rect(inner.x, inner.y, inner.width, SkillHeader.Height);
+            Rect header = new Rect(inner.x, inner.y, inner.width, BlockHeader.Height);
             Rect list = new Rect(inner.x, header.yMax + RowGap, inner.width, inner.yMax - header.yMax - RowGap);
             float width = Mathf.Max(ContentWidth, list.width - (ContentHeight > list.height ? ScrollBar : 0f));
             Header(header);
@@ -73,9 +73,9 @@ namespace ColonistSummary
                     if (cell.xMax > NameWidth && cell.x < rect.width)
                     {
                         bool clicked;
-                        if (column is SkillColumn skillColumn)
+                        if (column is BlockColumn blockColumn)
                         {
-                            clicked = SkillHeader.Draw(cell, skill, skillColumn, sorted, SummaryData.descending);
+                            clicked = BlockHeader.Draw(cell, skill, blockColumn, sorted, SummaryData.descending);
                             if (clicked) SoundDefOf.Tick_High.PlayOneShotOnCamera();
                         }
                         else
@@ -85,13 +85,13 @@ namespace ColonistSummary
                         }
                         if (clicked) SummaryData.SortOn(column);
                     }
-                    if (column is SkillColumn)
+                    if (column is BlockColumn)
                     {
                         skill++;
-                        if (i + 1 >= columns.Count || !(columns[i + 1] is SkillColumn))
+                        if (BlockHeader.IsBlockEnd(columns, i))
                         {
-                            // Divider between the skill block and the next column
-                            float gap = SkillHeader.TrailingGap;
+                            // Divider between a block and the next column
+                            float gap = BlockHeader.TrailingGap;
                             Theme.Fill(new Rect(Mathf.Round(x + column.width + gap / 2f), 8f, 1f, rect.height - 16f), Faces.Fade(Theme.BGLight, 0.9f));
                             x += gap;
                         }
@@ -167,7 +167,7 @@ namespace ColonistSummary
                         SummaryColumn column = columns[i];
                         Rect cell = new Rect(x, row.y, column.width, row.height);
                         if (cell.xMax > pinEdge && cell.x < scroll.x + viewport.width) column.Cell(cell, summary);
-                        if (column is SkillColumn && (i + 1 >= columns.Count || !(columns[i + 1] is SkillColumn))) x += SkillHeader.TrailingGap;
+                        if (BlockHeader.IsBlockEnd(columns, i)) x += BlockHeader.TrailingGap;
                         x += column.width;
                     }
                 }
@@ -202,7 +202,7 @@ namespace ColonistSummary
         private static void NameCell(Rect cell, PawnSummary summary)
         {
             Rect portrait = new Rect(cell.x + 4f, Mathf.Round(cell.center.y - PortraitSize / 2f), PortraitSize, PortraitSize);
-            CoreWidgets.Portrait(portrait, summary.pawn, Theme.HighlightGreen);
+            CoreWidgets.Portrait(portrait, summary.pawn, summary.kind == RowKind.Prisoner ? Theme.HighlightYellow : summary.kind == RowKind.Animal ? Theme.HighlightGray : Theme.HighlightGreen);
             Rect label = new Rect(portrait.xMax + 8f, cell.y, cell.xMax - portrait.xMax - 14f, cell.height);
             bool over = Mouse.IsOver(cell) && InView;
             float hover = ThemeMotion.Hover(cell, NameSalt, over);

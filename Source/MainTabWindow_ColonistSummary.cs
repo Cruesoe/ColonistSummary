@@ -28,6 +28,12 @@ namespace ColonistSummary
         private static string? searchTip;
         private static string? sortMenuTitle;
         private static string? failed;
+        private static string? summaryLabel;
+        private static string? summaryTip;
+        private static string? healthLabel;
+        private static string? healthTip;
+        private static float summaryWidth;
+        private static float healthWidth;
 
         private readonly Action draw;
         private readonly Action close;
@@ -40,7 +46,7 @@ namespace ColonistSummary
         private string sortTip = "";
         private string searchFound = "";
         private SortChoices? choices;
-        private int choicesColumns;
+        private int choicesKey = -1;
 
         public MainTabWindow_ColonistSummary()
         {
@@ -68,7 +74,7 @@ namespace ColonistSummary
                 {
                     // Every colonist counts, so searching never moves the window
                     float rows = SummaryData.all.Count * (SummaryTable.RowHeight + SummaryTable.RowGap);
-                    float fit = TitleHeight + Pad + SummaryTable.PanelChrome + SkillHeader.Height + SummaryTable.RowGap + rows + Pad * 2f;
+                    float fit = TitleHeight + Pad + SummaryTable.PanelChrome + BlockHeader.Height + SummaryTable.RowGap + rows + Pad * 2f;
                     size.y = Mathf.Min(size.y, Mathf.Max(MinHeight, Mathf.Ceil(fit)));
                 }
                 return size;
@@ -85,13 +91,19 @@ namespace ColonistSummary
         public override void PreOpen()
         {
             SummaryData.Clear();
-            SkillHeader.Opened();
+            BlockHeader.Opened();
             SummaryTable.Opened();
             searchHint ??= "ColonistSummary_SearchHint".Translate();
             searchTitle ??= "ColonistSummary_Search".Translate();
             searchTip ??= "ColonistSummary_SearchTip".Translate();
             sortMenuTitle ??= "ColonistSummary_SortMenu".Translate();
             failed ??= "ColonistSummary_Failed".Translate();
+            summaryLabel ??= "ColonistSummary_Page_Summary".Translate();
+            summaryTip ??= "ColonistSummary_Page_SummaryTip".Translate();
+            healthLabel ??= "ColonistSummary_Page_Health".Translate();
+            healthTip ??= "ColonistSummary_Page_HealthTip".Translate();
+            summaryWidth = Mathf.Ceil(CoreWidgets.Width(summaryLabel) + 44f);
+            healthWidth = Mathf.Ceil(CoreWidgets.Width(healthLabel) + 44f);
             laidOut = -1;
             choices = null;
             base.PreOpen();
@@ -171,16 +183,31 @@ namespace ColonistSummary
             }
             CoreWidgets.Tip(search, searchTitle, searchTip);
 
-            CoreWidgets.SummaryStrip(new Rect(room.x + 16f, y, search.x - 8f - room.x - 16f, ControlHeight), SummaryData.stats);
+            float x = PageButton(room.x + 16f, y, summaryWidth, SummaryPage.Summary, summaryLabel!, SummaryColumns.ColonistsTex, summaryTip!);
+            x = PageButton(x + 4f, y, healthWidth, SummaryPage.Health, healthLabel!, SummaryColumns.HealthTex, healthTip!);
+            CoreWidgets.SummaryStrip(new Rect(x + 12f, y, search.x - 8f - x - 12f, ControlHeight), SummaryData.stats);
         }
 
-        // Sort menu choices, read by the menu every frame; rebuilt only when the visible columns change
+        // One page switch; returns its right edge
+        private static float PageButton(float x, float y, float width, SummaryPage page, string label, Texture2D icon, string tip)
+        {
+            bool on = SummaryData.page == page;
+            if (CoreWidgets.Button(new Rect(x, y, width, ControlHeight), label, icon, Theme.HighlightGreen, true, tip, GameFont.Small, label, on) && !on)
+            {
+                SummaryData.SetPage(page);
+            }
+            return x + width;
+        }
+
+        // Sort menu choices, read by the menu every frame; rebuilt when the page or its shown columns change
+        private static int ChoicesKey => (int)SummaryData.page * 10000 + SummaryData.columns.Count;
+
         private SortChoices SortChoices()
         {
-            if (choices == null || choicesColumns != SummaryData.columns.Count)
+            if (choices == null || choicesKey != ChoicesKey)
             {
                 choices = BuildChoices();
-                choicesColumns = SummaryData.columns.Count;
+                choicesKey = ChoicesKey;
             }
             choices.sortBy = SummaryData.sortBy;
             choices.descending = SummaryData.descending;
@@ -214,7 +241,7 @@ namespace ColonistSummary
             for (int i = 0; i < SummaryData.columns.Count; i++)
             {
                 SummaryColumn column = SummaryData.columns[i];
-                Add(choices, column, column is SkillColumn ? Theme.HighlightYellow : Theme.HighlightGreen);
+                Add(choices, column, column is BlockColumn ? Theme.HighlightYellow : Theme.HighlightGreen);
             }
             return choices;
         }

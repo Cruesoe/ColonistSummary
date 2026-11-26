@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using System.Text;
 using RimWorld;
 using UIRethemed.Core;
+using RimWorld.Planet;
 using UnityEngine;
+using Verse.AI;
 using Verse;
 
 namespace ColonistSummary
@@ -59,6 +61,23 @@ namespace ColonistSummary
         public string infectionTip = "";
         public Danger infectionDanger;
         public float infectionRank;
+        public string jobText = "";
+        // Mood as a share of the bar, -1 without a mood; break thresholds as shares too
+        public float moodLevel = -1f;
+        public float breakMinor;
+        public float breakMajor;
+        public float breakExtreme;
+        public Danger moodDanger;
+        public string moodText = "";
+        public string moodTip = "";
+        public string mentalState = "";
+        public readonly NeedSummary food = new NeedSummary();
+        public readonly NeedSummary rest = new NeedSummary();
+        public readonly NeedSummary joy = new NeedSummary();
+        // Prisoners and animals are only listed on the Health page
+        public RowKind kind;
+        private HealthSummary? health;
+        public HealthSummary Health => health ??= new HealthSummary();
         // What the cached tips and armor were built from
         private Ideo? tipIdeo;
         private string? tipIdeoName;
@@ -201,6 +220,43 @@ namespace ColonistSummary
 
             RefreshBleeding(pawn, hediffs);
             RefreshInfection(hediffs);
+            RefreshJob(pawn);
+            RefreshMood(pawn);
+            food.Refresh(pawn.needs?.food);
+            rest.Refresh(pawn.needs?.rest);
+            joy.Refresh(pawn.needs?.joy);
+        }
+
+        // What the pawn is doing, as its inspect pane says; caravan members show their caravan
+        private void RefreshJob(Pawn pawn)
+        {
+            string job;
+            if (pawn.Spawned) job = pawn.GetJobReport().CapitalizeFirst();
+            else if (pawn.GetCaravan() is Caravan caravan) job = "ColonistSummary_InCaravan".Translate(caravan.LabelCap);
+            else job = "";
+            jobText = job;
+        }
+
+        // Mood against the break thresholds; a mental state replaces it, in red
+        private void RefreshMood(Pawn pawn)
+        {
+            Need_Mood? mood = pawn.needs?.mood;
+            mentalState = pawn.InMentalState ? pawn.MentalStateDef.LabelCap.ToString() : "";
+            if (mood == null)
+            {
+                moodLevel = -1f;
+                moodText = mentalState;
+                moodTip = "";
+                return;
+            }
+            moodLevel = mood.CurLevelPercentage;
+            MentalBreaker breaker = pawn.mindState.mentalBreaker;
+            breakMinor = breaker.BreakThresholdMinor;
+            breakMajor = breaker.BreakThresholdMajor;
+            breakExtreme = breaker.BreakThresholdExtreme;
+            moodDanger = moodLevel < breakMajor ? Danger.Losing : moodLevel < breakMinor ? Danger.Close : Danger.Safe;
+            moodText = mentalState.Length > 0 ? mentalState : moodLevel.ToStringPercent();
+            moodTip = "ColonistSummary_MoodTip".Translate(mood.MoodString.CapitalizeFirst(), moodLevel.ToStringPercent(), breakMinor.ToStringPercent(), breakMajor.ToStringPercent(), breakExtreme.ToStringPercent());
         }
 
         // Green when the colonist won't bleed out soon (or is deathless), yellow within a day, red within half a day

@@ -16,7 +16,9 @@ namespace ColonistSummary
             startsDescending = false;
         }
 
-        public override bool Visible => ModsConfig.BiotechActive;
+        public override bool Available => ModsConfig.BiotechActive;
+
+        public override string? Requirement => ModsConfig.BiotechActive ? null : "Biotech";
 
         public override void Cell(Rect rect, PawnSummary row)
         {

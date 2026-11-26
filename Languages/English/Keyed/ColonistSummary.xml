@@ -75,4 +75,94 @@
   <ColonistSummary_Column_HeatTip>Overall heat armor, from apparel and body. The bar fills at 100%.</ColonistSummary_Column_HeatTip>
   <ColonistSummary_Column_Comfort>Comfortable</ColonistSummary_Column_Comfort>
   <ColonistSummary_Column_ComfortTip>Comfortable temperature range, in green while the current temperature is inside it. Sorts by the lowest comfortable temperature.</ColonistSummary_Column_ComfortTip>
+  <ColonistSummary_Column_Job>Doing</ColonistSummary_Column_Job>
+  <ColonistSummary_Column_JobTip>What each colonist is doing right now, as their inspect pane says.</ColonistSummary_Column_JobTip>
+  <ColonistSummary_InCaravan>In caravan: {0}</ColonistSummary_InCaravan>
+  <ColonistSummary_Column_Mood>Mood</ColonistSummary_Column_Mood>
+  <ColonistSummary_Column_MoodTip>Mood, with marks at the minor, major and extreme break thresholds: green above minor, yellow below it, red below major. A colonist having a mental break shows it in red instead. Hover for the details.</ColonistSummary_Column_MoodTip>
+  <ColonistSummary_MoodTip>{0}: {1}\n\nMinor break below {2}\nMajor break below {3}\nExtreme break below {4}</ColonistSummary_MoodTip>
+  <ColonistSummary_Column_Food>Food</ColonistSummary_Column_Food>
+  <ColonistSummary_Column_FoodTip>How fed each colonist is: yellow below 30%, red below 15%.</ColonistSummary_Column_FoodTip>
+  <ColonistSummary_Column_Rest>Rest</ColonistSummary_Column_Rest>
+  <ColonistSummary_Column_RestTip>How rested each colonist is: yellow below 30%, red below 15%.</ColonistSummary_Column_RestTip>
+  <ColonistSummary_Column_Recreation>Recreation</ColonistSummary_Column_Recreation>
+  <ColonistSummary_Column_RecreationTip>Each colonist's recreation: yellow below 30%, red below 15%.</ColonistSummary_Column_RecreationTip>
+  <ColonistSummary_Column_Skills>Skills</ColonistSummary_Column_Skills>
+  <ColonistSummary_Column_SkillsTip>A column for every skill, with its level and passion.</ColonistSummary_Column_SkillsTip>
+  <ColonistSummary_Stat_Mental>Mental breaks</ColonistSummary_Stat_Mental>
+  <ColonistSummary_Stat_MentalTip>Colonists having a mental break.</ColonistSummary_Stat_MentalTip>
+
+  <ColonistSummary_Page_Summary>Summary</ColonistSummary_Page_Summary>
+  <ColonistSummary_Page_SummaryTip>Each colonist's skills, gear, protection, mood and what they're doing.</ColonistSummary_Page_SummaryTip>
+  <ColonistSummary_Page_Health>Health</ColonistSummary_Page_Health>
+  <ColonistSummary_Page_HealthTip>Each colonist's health: capacities, bleeding, infections, tending, missing and added parts, chronic and other conditions, and operations. Prisoners and animals can be listed too, in the mod settings.</ColonistSummary_Page_HealthTip>
+  <ColonistSummary_ListedCount>{0} listed</ColonistSummary_ListedCount>
+
+  <ColonistSummary_Stat_Downed>Downed</ColonistSummary_Stat_Downed>
+  <ColonistSummary_Stat_DownedTip>Listed pawns who are downed.</ColonistSummary_Stat_DownedTip>
+  <ColonistSummary_Stat_Tending>Need tending</ColonistSummary_Stat_Tending>
+  <ColonistSummary_Stat_TendingTip>Listed pawns with injuries or illnesses that need tending now.</ColonistSummary_Stat_TendingTip>
+  <ColonistSummary_Stat_Surgery>Awaiting surgery</ColonistSummary_Stat_Surgery>
+  <ColonistSummary_Stat_SurgeryTip>Listed pawns with operations queued.</ColonistSummary_Stat_SurgeryTip>
+  <ColonistSummary_Stat_Medicine>Medicine</ColonistSummary_Stat_Medicine>
+  <ColonistSummary_Stat_MedicineTip>Medicine of every kind in stockpiles on your home maps.</ColonistSummary_Stat_MedicineTip>
+
+  <ColonistSummary_Column_Health>Health</ColonistSummary_Column_Health>
+  <ColonistSummary_Column_HealthTip>Overall health, as the colonist bar shows it: green from 80%, yellow from 40%, red below.</ColonistSummary_Column_HealthTip>
+  <ColonistSummary_Column_Pain>Pain</ColonistSummary_Column_Pain>
+  <ColonistSummary_Column_PainTip>Pain level, as the Health tab shows it. Hover for what's causing it.</ColonistSummary_Column_PainTip>
+  <ColonistSummary_Column_Capacities>Capacities</ColonistSummary_Column_Capacities>
+  <ColonistSummary_Column_CapacitiesTip>A column for every capacity, such as consciousness, moving and sight: dim at 100%, green above, yellow below, red under half. Hover for what affects each.</ColonistSummary_Column_CapacitiesTip>
+  <ColonistSummary_Column_Tending>Tending</ColonistSummary_Column_Tending>
+  <ColonistSummary_Column_TendingTip>Conditions that need tending now: red when one is bleeding, an infection or life-threatening, yellow otherwise. Shows "Tended" when every tendable condition is tended. Hover for each, with tend quality and time left.</ColonistSummary_Column_TendingTip>
+  <ColonistSummary_Untended>{0} untended</ColonistSummary_Untended>
+  <ColonistSummary_TendedQuality>tended {0}, {1} left</ColonistSummary_TendedQuality>
+  <ColonistSummary_TendingTip>Needing tending: {0}</ColonistSummary_TendingTip>
+  <ColonistSummary_TendedTip>Every tendable condition is tended:</ColonistSummary_TendedTip>
+  <ColonistSummary_Column_MedicalCare>Medicine</ColonistSummary_Column_MedicalCare>
+  <ColonistSummary_Column_MedicalCareTip>The best medicine doctors may use on each pawn. Click to change it.</ColonistSummary_Column_MedicalCareTip>
+  <ColonistSummary_Column_SelfTend>Self-tend</ColonistSummary_Column_SelfTend>
+  <ColonistSummary_Column_SelfTendTip>Whether a colonist may tend their own injuries. Click to change it. Greyed out for colonists who can never doctor.</ColonistSummary_Column_SelfTendTip>
+  <ColonistSummary_Column_Missing>Missing</ColonistSummary_Column_Missing>
+  <ColonistSummary_Column_MissingTip>Missing body parts, in red. Hover for each.</ColonistSummary_Column_MissingTip>
+  <ColonistSummary_MissingTip>Missing body parts:</ColonistSummary_MissingTip>
+  <ColonistSummary_Column_Implants>Implants</ColonistSummary_Column_Implants>
+  <ColonistSummary_Column_ImplantsTip>Prosthetics, bionics and implants. Hover for each and the body part it's in.</ColonistSummary_Column_ImplantsTip>
+  <ColonistSummary_ImplantsTip>Added parts and implants:</ColonistSummary_ImplantsTip>
+  <ColonistSummary_Column_Chronic>Chronic</ColonistSummary_Column_Chronic>
+  <ColonistSummary_Column_ChronicTip>Chronic conditions, such as a bad back, cataracts or dementia, and permanent injuries like scars. Red when one is life-threatening. Hover for each.</ColonistSummary_Column_ChronicTip>
+  <ColonistSummary_ChronicTip>Chronic conditions and permanent injuries:</ColonistSummary_ChronicTip>
+  <ColonistSummary_Column_Conditions>Conditions</ColonistSummary_Column_Conditions>
+  <ColonistSummary_Column_ConditionsTip>Other harmful conditions, such as hypothermia, heatstroke, toxic buildup, food poisoning, malnutrition and addictions, plus pregnancy. Red when one is life-threatening. Hover for each.</ColonistSummary_Column_ConditionsTip>
+  <ColonistSummary_ConditionsTip>Other conditions:</ColonistSummary_ConditionsTip>
+  <ColonistSummary_Column_Operations>Operations</ColonistSummary_Column_Operations>
+  <ColonistSummary_Column_OperationsTip>Queued operations. The dot is green when the next one can start, yellow when it's suspended and red when it can't start: no doctor, missing medicine or parts, or no bed. Hover for the queue and the reason. The + button adds an operation.</ColonistSummary_Column_OperationsTip>
+  <ColonistSummary_OperationsTip>Queued operations:</ColonistSummary_OperationsTip>
+  <ColonistSummary_OpReady>Ready: waiting for a doctor to start.</ColonistSummary_OpReady>
+  <ColonistSummary_OpSuspended>suspended</ColonistSummary_OpSuspended>
+  <ColonistSummary_OpSuspendedTip>The next operation is suspended.</ColonistSummary_OpSuspendedTip>
+  <ColonistSummary_OpNotOnMap>Not on a map, so no operation can start.</ColonistSummary_OpNotOnMap>
+  <ColonistSummary_OpNoDoctor>No one else here is assigned to {0}.</ColonistSummary_OpNoDoctor>
+  <ColonistSummary_OpNoSkilledDoctor>No one else here assigned to {0} has the skill: needs {1}.</ColonistSummary_OpNoSkilledDoctor>
+  <ColonistSummary_OpMissing>Missing an ingredient: {0}.</ColonistSummary_OpMissing>
+  <ColonistSummary_OpNoBed>No bed the patient can use.</ColonistSummary_OpNoBed>
+  <ColonistSummary_AddOperation>Add operation</ColonistSummary_AddOperation>
+  <ColonistSummary_AddOperationTip>Opens the list of operations, as on the Health tab.</ColonistSummary_AddOperationTip>
+  <ColonistSummary_NoOperations>No operations available</ColonistSummary_NoOperations>
+
+  <ColonistSummary_Settings_Columns>Columns</ColonistSummary_Settings_Columns>
+  <ColonistSummary_Settings_SummaryPage>Summary page</ColonistSummary_Settings_SummaryPage>
+  <ColonistSummary_Settings_HealthPage>Health page</ColonistSummary_Settings_HealthPage>
+  <ColonistSummary_Settings_Prisoners>List prisoners</ColonistSummary_Settings_Prisoners>
+  <ColonistSummary_Settings_PrisonersTip>Lists prisoners on the Health page after your colonists.</ColonistSummary_Settings_PrisonersTip>
+  <ColonistSummary_Settings_Animals>List animals</ColonistSummary_Settings_Animals>
+  <ColonistSummary_Settings_AnimalsTip>Lists your animals on the Health page after your colonists and prisoners.</ColonistSummary_Settings_AnimalsTip>
+  <ColonistSummary_Settings_ColumnsResetTip>Shows every column again, lists prisoners and stops listing animals.</ColonistSummary_Settings_ColumnsResetTip>
+  <ColonistSummary_Settings_AllShown>All columns shown</ColonistSummary_Settings_AllShown>
+  <ColonistSummary_Settings_HiddenCount>{0} hidden</ColonistSummary_Settings_HiddenCount>
+  <ColonistSummary_Settings_ListsBoth>Health lists prisoners and animals</ColonistSummary_Settings_ListsBoth>
+  <ColonistSummary_Settings_ListsPrisoners>Health lists prisoners</ColonistSummary_Settings_ListsPrisoners>
+  <ColonistSummary_Settings_ListsAnimals>Health lists animals</ColonistSummary_Settings_ListsAnimals>
+  <ColonistSummary_Settings_ListsColonists>Health lists colonists only</ColonistSummary_Settings_ListsColonists>
+  <ColonistSummary_Settings_NeedsDlc>Needs {0}.</ColonistSummary_Settings_NeedsDlc>
 </LanguageData>
