@@ -17,6 +17,8 @@ namespace ColonistSummary
         private static string? addTitle;
         private static string? addTip;
 
+        public override bool HeadingLeft => true;
+
         public OperationsColumn()
         {
             width = 230f;

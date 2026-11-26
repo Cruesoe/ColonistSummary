@@ -19,6 +19,9 @@ namespace ColonistSummary
         // Whether the game has what the column shows (a DLC, a setting); hidden columns stay available
         public virtual bool Available => true;
 
+        // Heading starts at the left, for columns whose cells start at the left
+        public virtual bool HeadingLeft => false;
+
         // The DLC the column needs, for the settings page; null when it needs none or it's active
         public virtual string? Requirement => null;
 

@@ -11,6 +11,8 @@ namespace ColonistSummary
         private const float BarHeight = 8f;
         private const float TextWidth = 40f;
 
+        public override bool HeadingLeft => true;
+
         public MoodColumn()
         {
             width = 130f;

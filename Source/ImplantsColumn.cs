@@ -14,6 +14,8 @@ namespace ColonistSummary
 
         private static readonly Texture2D DefaultTex = CoreWidgets.Icon("gear-six");
 
+        public override bool HeadingLeft => true;
+
         public ImplantsColumn()
         {
             width = IconsShown * Step + 36f;

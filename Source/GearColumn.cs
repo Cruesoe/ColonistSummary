@@ -15,6 +15,8 @@ namespace ColonistSummary
 
         private readonly bool weapons;
 
+        public override bool HeadingLeft => true;
+
         public GearColumn(bool weapons)
         {
             this.weapons = weapons;

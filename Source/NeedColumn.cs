@@ -13,6 +13,8 @@ namespace ColonistSummary
 
         private readonly Func<PawnSummary, NeedSummary> needOf;
 
+        public override bool HeadingLeft => true;
+
         public NeedColumn(Func<PawnSummary, NeedSummary> needOf)
         {
             this.needOf = needOf;

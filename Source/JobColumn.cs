@@ -7,6 +7,8 @@ namespace ColonistSummary
     // What each colonist is doing right now; hover for the full text when it's cut short
     public class JobColumn : SummaryColumn
     {
+        public override bool HeadingLeft => true;
+
         public JobColumn()
         {
             width = 200f;

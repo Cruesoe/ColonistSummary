@@ -80,10 +80,18 @@ namespace ColonistSummary
                         }
                         else
                         {
-                            Rect heading = new Rect(cell.x, rect.height - HeadingHeight - 2f, cell.width, HeadingHeight);
-                            clicked = CoreWidgets.SortHeading(heading, column.label, column.icon, sorted, SummaryData.descending, column.label, column.tip);
+                            // Left headings start where the cells' content does
+                            Rect heading = column.HeadingLeft
+                                ? new Rect(cell.x + 2f, rect.height - HeadingHeight - 2f, cell.width - 2f, HeadingHeight)
+                                : new Rect(cell.x, rect.height - HeadingHeight - 2f, cell.width, HeadingHeight);
+                            clicked = CoreWidgets.SortHeading(heading, column.label, column.icon, sorted, SummaryData.descending, column.label, column.tip, column.HeadingLeft);
                         }
                         if (clicked) SummaryData.SortOn(column);
+                    }
+                    // Faint divider between neighboring headings, so each heading reads as its column's
+                    if (!(column is BlockColumn) && i + 1 < columns.Count && !(columns[i + 1] is BlockColumn) && x + column.width > NameWidth)
+                    {
+                        Theme.Fill(new Rect(Mathf.Round(x + column.width), rect.height - HeadingHeight, 1f, HeadingHeight - 4f), Faces.Fade(Theme.BGLight, 0.6f));
                     }
                     if (column is BlockColumn)
                     {

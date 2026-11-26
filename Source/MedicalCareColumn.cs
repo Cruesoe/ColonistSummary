@@ -12,7 +12,7 @@ namespace ColonistSummary
 
         public MedicalCareColumn()
         {
-            width = 52f;
+            width = 84f;
         }
 
         public static bool Shows(Pawn pawn)

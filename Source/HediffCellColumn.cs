@@ -12,6 +12,8 @@ namespace ColonistSummary
 
         private readonly Func<HealthSummary, HediffCell> cellOf;
 
+        public override bool HeadingLeft => true;
+
         public HediffCellColumn(Func<HealthSummary, HediffCell> cellOf, float width)
         {
             this.cellOf = cellOf;

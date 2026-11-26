@@ -13,7 +13,7 @@ namespace ColonistSummary
 
         public SelfTendColumn()
         {
-            width = 52f;
+            width = 84f;
         }
 
         private static bool Shows(Pawn pawn) => pawn.IsColonist && !pawn.Dead && !pawn.DevelopmentalStage.Baby() && pawn.playerSettings != null;
