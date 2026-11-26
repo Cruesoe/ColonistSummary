@@ -69,6 +69,33 @@ namespace ColonistSummary
             e.Use();
         }
 
+        // Lines along every edge of each block's columns, under the headings, as Work draws with column outlines on
+        private static void BlockLines(float x, float width, float height)
+        {
+            List<SummaryColumn> columns = SummaryData.columns;
+            float shift = BlockHeader.Slant(height);
+            for (int i = 0; i < columns.Count; i++)
+            {
+                SummaryColumn column = columns[i];
+                if (column is BlockColumn)
+                {
+                    Line(x);
+                    if (BlockHeader.IsBlockEnd(columns, i))
+                    {
+                        Line(x + column.width);
+                        x += BlockHeader.TrailingGap;
+                    }
+                }
+                x += column.width;
+            }
+
+            void Line(float at)
+            {
+                float lx = Mathf.Round(at);
+                if (lx + shift >= NameWidth && lx <= width) BlockHeader.ColumnLine(lx, height);
+            }
+        }
+
         private static void Header(Rect rect)
         {
             Rounded.Fill(rect, Theme.BGDark);
@@ -77,6 +104,7 @@ namespace ColonistSummary
             {
                 List<SummaryColumn> columns = SummaryData.columns;
                 float x = NameWidth - scroll.x;
+                if (BlockHeader.DrawsLines) BlockLines(x, rect.width, rect.height);
                 int skill = 0;
                 for (int i = 0; i < columns.Count; i++)
                 {

@@ -11,10 +11,7 @@ namespace ColonistSummary
     public static class BlockHeader
     {
         private const float LabelRow = 20f;
-        // Space under the labels: classic keeps room for the sort marker below; turned labels sit on the other headings' line
         private const float LabelFoot = 24f;
-        private const float SlantedFoot = 13f;
-        private const float VerticalFoot = 6f;
         private const float MaxRotatedLabel = 110f;
         private const float MinRotatedLabel = 40f;
         private const float IconSquare = 30f;
@@ -26,6 +23,8 @@ namespace ColonistSummary
 
         // Window lifetime: the style is read when the window opens, the sizes with each rebuild of the shown columns
         public static SkillHeaderStyle style;
+        // Work's "Column outlines" setting: slanted headings get a line along each column edge
+        private static bool outlines;
         private static float longestLabel;
         private static float lastOverhang;
         private static bool anyBlock;
@@ -33,6 +32,7 @@ namespace ColonistSummary
         public static void Opened()
         {
             style = WorkHeaderStyle.Read();
+            outlines = WorkHeaderStyle.Outlines();
             longestLabel = 0f;
             lastOverhang = 0f;
             anyBlock = false;
@@ -68,8 +68,8 @@ namespace ColonistSummary
                 float rotated = Mathf.Clamp(longestLabel, MinRotatedLabel, MaxRotatedLabel);
                 switch (style)
                 {
-                    case SkillHeaderStyle.Vertical: return Mathf.Round(rotated + VerticalFoot + 6f);
-                    case SkillHeaderStyle.Slanted: return Mathf.Round(rotated * SlantSin + LabelRow * SlantCos + SlantedFoot);
+                    case SkillHeaderStyle.Vertical: return Mathf.Round(rotated + LabelFoot + 6f);
+                    case SkillHeaderStyle.Slanted: return Mathf.Round(rotated * SlantSin + LabelRow * SlantCos + LabelFoot);
                     case SkillHeaderStyle.Icons: return 56f;
                     default: return 54f;
                 }
@@ -92,17 +92,34 @@ namespace ColonistSummary
                 label = new Rect(Mathf.Round(cell.center.x - width / 2f), 3f + index % 2 * LabelRow, width, LabelRow);
                 hit = new Rect(cell.x + 1f, label.y, cell.width - 2f, cell.height - label.y);
             }
-            bool over = Mouse.IsOver(hit) || (style == SkillHeaderStyle.Classic && Mouse.IsOver(label));
+            bool over;
+            if (style == SkillHeaderStyle.Slanted)
+            {
+                // The slanted heading's area leans right with its label: the mouse counts when it is over this column's slanted band
+                hit = new Rect(cell.x, 0f, cell.width + cell.height / SlantTan, cell.height);
+                Vector2 mouse = Event.current.mousePosition;
+                float along = mouse.x - (cell.yMax - mouse.y) / SlantTan;
+                over = Mouse.IsOver(hit) && along >= cell.x && along < cell.xMax;
+            }
+            else
+            {
+                over = Mouse.IsOver(hit) || (style == SkillHeaderStyle.Classic && Mouse.IsOver(label));
+            }
+            over &= Event.current.mousePosition.x >= SummaryTable.NameWidth;
             float lit = ThemeMotion.Hover(cell, HeadSalt, over);
 
-            if (lit > 0f && style != SkillHeaderStyle.Icons)
+            if (lit > 0f && style == SkillHeaderStyle.Slanted)
+            {
+                SlantedBand(cell, new Color(1f, 1f, 1f, 0.06f * lit));
+            }
+            else if (lit > 0f && style != SkillHeaderStyle.Icons)
             {
                 float top = style == SkillHeaderStyle.Classic ? label.yMax : 2f;
                 Rounded.Fill(new Rect(cell.x + 2f, top, cell.width - 4f, cell.yMax - top - 2f), new Color(1f, 1f, 1f, 0.06f * lit));
             }
 
             Color color = sorted ? Color.white : Color.Lerp(Theme.TextDim, Color.white, lit);
-            float foot = cell.yMax - (style == SkillHeaderStyle.Vertical ? VerticalFoot : style == SkillHeaderStyle.Slanted ? SlantedFoot : LabelFoot);
+            float foot = cell.yMax - LabelFoot;
             switch (style)
             {
                 case SkillHeaderStyle.Vertical:
@@ -123,13 +140,7 @@ namespace ColonistSummary
                     }
                     break;
             }
-            // Turned labels reach the bottom, so their sort marker sits beside the label's foot: left of a slanted one, right of a vertical one
-            if (sorted)
-            {
-                float markerX = style == SkillHeaderStyle.Slanted ? cell.center.x - 14f : style == SkillHeaderStyle.Vertical ? cell.center.x + 10f : cell.center.x - 4f;
-                float markerY = style == SkillHeaderStyle.Slanted || style == SkillHeaderStyle.Vertical ? cell.yMax - 20f : cell.yMax - 22f;
-                CoreWidgets.SortMarker(new Rect(Mathf.Round(markerX), markerY, 8f, 10f), descending);
-            }
+            if (sorted) CoreWidgets.SortMarker(new Rect(Mathf.Round(cell.center.x) - 4f, cell.yMax - 22f, 8f, 10f), descending);
 
             if (!over) return false;
             CoreWidgets.Tip(hit, column.label, column.tip);
@@ -202,6 +213,102 @@ namespace ColonistSummary
             if (toDevice == null) return false;
             screen = toDevice(local);
             return true;
+        }
+
+        public static bool DrawsLines => outlines && style == SkillHeaderStyle.Slanted;
+
+        // How far a slanted line's top leans right of its foot
+        public static float Slant(float height) => height / SlantTan;
+
+        // A slanted line up the headings from the column edge at lx, as in Work
+        public static void ColumnLine(float lx, float height)
+        {
+            float shift = height / SlantTan;
+            Texture2D? edge = EdgeTexture(shift + 3f, height);
+            if (edge == null) return;
+            GUI.color = Faces.Fade(Theme.BGLight, 0.9f);
+            GUI.DrawTexture(new Rect(lx - 1f, 0f, shift + 3f, height), edge);
+            GUI.color = Color.white;
+        }
+
+        // Session lifetime: the line texture, rebuilt when the header size or UI scale changes
+        private static Texture2D? edgeTex;
+        private static int edgeWidth;
+        private static int edgeHeight;
+
+        // An anti-aliased one-pixel line from the bottom left to the top right at the slant angle
+        private static Texture2D? EdgeTexture(float width, float height)
+        {
+            float scale = Prefs.UIScale;
+            int w = Mathf.Max(2, Mathf.RoundToInt(width * scale));
+            int h = Mathf.Max(2, Mathf.RoundToInt(height * scale));
+            if (edgeTex != null && w == edgeWidth && h == edgeHeight) return edgeTex;
+            if (edgeTex != null) UnityEngine.Object.Destroy(edgeTex);
+            edgeWidth = w;
+            edgeHeight = h;
+            edgeTex = new Texture2D(w, h, TextureFormat.RGBA32, false) { wrapMode = TextureWrapMode.Clamp, filterMode = FilterMode.Bilinear };
+            float half = scale * 0.5f / SlantSin;
+            float soft = 1f / SlantSin;
+            Color[] pixels = new Color[w * h];
+            for (int y = 0; y < h; y++)
+            {
+                float center = scale + (y + 0.5f) / SlantTan;
+                for (int x = 0; x < w; x++)
+                {
+                    pixels[y * w + x] = new Color(1f, 1f, 1f, Mathf.Clamp01((half - Mathf.Abs(x + 0.5f - center)) / soft + 0.5f));
+                }
+            }
+            edgeTex.SetPixels(pixels);
+            edgeTex.Apply(false, false);
+            return edgeTex;
+        }
+
+        // Session lifetime: hover bands per size, at most eight kept
+        private static readonly Dictionary<(int, int, int), Texture2D> bandTexes = new Dictionary<(int, int, int), Texture2D>();
+
+        // Hover fill for a slanted heading: the column's band leaning right with the labels
+        private static void SlantedBand(Rect cell, Color color)
+        {
+            Rect position = new Rect(Mathf.Round(cell.x), cell.y, Mathf.Round(cell.width + cell.height / SlantTan), cell.height);
+            Texture2D? band = BandTexture(position.width, position.height, cell.width);
+            if (band == null) return;
+            GUI.color = color;
+            GUI.DrawTexture(position, band);
+            GUI.color = Color.white;
+        }
+
+        private static Texture2D? BandTexture(float width, float height, float column)
+        {
+            float scale = Prefs.UIScale;
+            int w = Mathf.Max(2, Mathf.RoundToInt(width * scale));
+            int h = Mathf.Max(2, Mathf.RoundToInt(height * scale));
+            int c = Mathf.RoundToInt(column * scale);
+            (int, int, int) key = (w, h, c);
+            if (bandTexes.TryGetValue(key, out Texture2D? cached) && cached != null) return cached;
+            if (bandTexes.Count >= 8)
+            {
+                foreach (Texture2D old in bandTexes.Values)
+                {
+                    if (old != null) UnityEngine.Object.Destroy(old);
+                }
+                bandTexes.Clear();
+            }
+            Texture2D texture = new Texture2D(w, h, TextureFormat.RGBA32, false) { wrapMode = TextureWrapMode.Clamp, filterMode = FilterMode.Bilinear };
+            bandTexes[key] = texture;
+            float half = column * scale / 2f;
+            float soft = 1f / SlantSin;
+            Color[] pixels = new Color[w * h];
+            for (int y = 0; y < h; y++)
+            {
+                float center = half + (y + 0.5f) / SlantTan;
+                for (int x = 0; x < w; x++)
+                {
+                    pixels[y * w + x] = new Color(1f, 1f, 1f, Mathf.Clamp01((half - Mathf.Abs(x + 0.5f - center)) / soft + 0.5f));
+                }
+            }
+            texture.SetPixels(pixels);
+            texture.Apply(false, false);
+            return texture;
         }
 
         private static void IconHeading(Rect cell, BlockColumn column, bool sorted, float lit)
