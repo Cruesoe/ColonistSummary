@@ -21,25 +21,66 @@ namespace ColonistSummary
             startsDescending = !weapons;
         }
 
+        // Apparel slots worn by anyone listed, head to toe; rebuilt with the rows (window lifetime)
+        private readonly List<long> slots = new List<long>();
+
         private List<GearItem> Items(PawnSummary row) => weapons ? row.weapons : row.apparel;
 
-        // Wide enough for every item of the pawn with the most
+        // Weapons: wide enough for the pawn with the most. Apparel: one place per slot anyone wears, so slots line up
         public override void Measure()
         {
-            int most = 1;
             List<PawnSummary> rows = SummaryData.all;
-            for (int i = 0; i < rows.Count; i++) most = Mathf.Max(most, Items(rows[i]).Count);
-            width = Mathf.Max(CoreWidgets.Width(label) + 24f, most * Step + 8f);
+            int places = 1;
+            if (weapons)
+            {
+                for (int i = 0; i < rows.Count; i++) places = Mathf.Max(places, rows[i].weapons.Count);
+            }
+            else
+            {
+                slots.Clear();
+                for (int i = 0; i < rows.Count; i++)
+                {
+                    List<GearItem> items = rows[i].apparel;
+                    for (int j = 0; j < items.Count; j++)
+                    {
+                        if (!slots.Contains(items[j].slot)) slots.Add(items[j].slot);
+                    }
+                }
+                slots.Sort();
+                for (int i = 0; i < rows.Count; i++)
+                {
+                    List<GearItem> items = rows[i].apparel;
+                    for (int j = 0; j < items.Count; j++) items[j].position = slots.BinarySearch(items[j].slot);
+                }
+                places = Mathf.Max(1, slots.Count);
+            }
+            width = Mathf.Max(CoreWidgets.Width(label) + 24f, places * Step + 8f);
         }
 
         public override void Cell(Rect rect, PawnSummary row)
         {
             List<GearItem> items = Items(row);
             float y = Mathf.Round(rect.center.y - SlotSize / 2f);
-            for (int i = 0; i < items.Count; i++)
+            if (weapons)
             {
-                Item(new Rect(rect.x + 4f + i * Step, y, SlotSize, SlotSize), items[i]);
+                for (int i = 0; i < items.Count; i++) Item(Place(rect, y, i), items[i]);
+                return;
             }
+            // Items are in slot order, so one pass fills each place with its item or an empty box
+            int next = 0;
+            for (int place = 0; place < slots.Count; place++)
+            {
+                if (next < items.Count && items[next].position == place) Item(Place(rect, y, place), items[next++]);
+                else Empty(Place(rect, y, place));
+            }
+        }
+
+        private static Rect Place(Rect rect, float y, int place) => new Rect(rect.x + 4f + place * Step, y, SlotSize, SlotSize);
+
+        private static void Empty(Rect slot)
+        {
+            if (Event.current.type != EventType.Repaint) return;
+            Rounded.Border(slot, Faces.Fade(Theme.HighlightGray, 0.25f));
         }
 
         private static void Item(Rect slot, GearItem item)

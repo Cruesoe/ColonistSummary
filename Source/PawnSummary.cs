@@ -16,6 +16,12 @@ namespace ColonistSummary
 
         public readonly Pawn pawn;
         public string name = "";
+        // Work template tag from UI Rethemed - Work, empty without one
+        public string workTag = "";
+        public string workTagTip = "";
+        public Color workTagColor;
+        public float workTagWidth;
+        private string workNames = "";
         // Place in the colonist bar's order
         public int order;
         // Lower-case name, weapon and apparel labels for the search field
@@ -116,10 +122,11 @@ namespace ColonistSummary
             {
                 tmpApparel.Clear();
                 tmpApparel.AddRange(pawn.apparel.WornApparel);
-                // Outer layers first, then larger coverage
-                tmpApparel.SortBy(a => -a.def.apparel.LastLayer.drawOrder, a => -a.def.apparel.HumanBodyCoverage);
+                // Larger coverage first, so it keeps the slot when two items share one
+                tmpApparel.SortBy(a => -a.def.apparel.HumanBodyCoverage);
                 for (int i = 0; i < tmpApparel.Count; i++) apparel.Add(new GearItem(tmpApparel[i], ItemTip(pawn, tmpApparel[i])));
                 tmpApparel.Clear();
+                ApparelSlots.Assign(apparel);
             }
 
             statsTick = int.MinValue;
@@ -130,6 +137,7 @@ namespace ColonistSummary
         {
             searchBuilder.Clear();
             searchBuilder.Append(name);
+            if (workNames.Length > 0) searchBuilder.Append('\n').Append(workNames);
             for (int i = 0; i < weapons.Count; i++) searchBuilder.Append('\n').Append(weapons[i].thing.LabelNoCount);
             for (int i = 0; i < apparel.Count; i++) searchBuilder.Append('\n').Append(apparel[i].thing.LabelNoCount);
             searchText = searchBuilder.ToString().ToLowerInvariant();
@@ -146,9 +154,14 @@ namespace ColonistSummary
             statsHediffCount = hediffs.Count;
 
             string newName = pawn.LabelShortCap;
-            if (newName != name)
+            WorkTemplates.TryGet(pawn, out string tag, out string names, out workTagColor);
+            if (newName != name || tag != workTag || names != workNames)
             {
                 name = newName;
+                workTag = tag;
+                workNames = names;
+                workTagTip = tag.Length > 0 ? "ColonistSummary_WorkTemplateTip".Translate(names).ToString() : "";
+                workTagWidth = tag.Length > 0 ? Mathf.Ceil(CoreWidgets.Width(tag, GameFont.Small)) + 12f : 0f;
                 RebuildSearch();
             }
             Ideo? ideo = pawn.Ideo;
