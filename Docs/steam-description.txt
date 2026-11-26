@@ -1,27 +1,49 @@
-[b]Adds a Summary tab that shows every colonist on one row: health, skills, gear and protection.[/b]
+[b]Adds a Summary tab that shows every colonist on one row, with a Summary page for skills, gear and protection and a Health page for everything medical.[/b]
 
-See at a glance who's bleeding out, who's best at what and who's under-armored, without clicking through each colonist's tabs. It's built on [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3832843406]UI Rethemed - Core[/url] and matches the look of the UI Rethemed tabs.
+See at a glance who's bleeding out, who needs tending, who's waiting on an operation, who's best at what and who's under-armored, without clicking through each colonist's tabs. It's built on [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3832843406]UI Rethemed - Core[/url] and matches the look of the UI Rethemed tabs.
 
-[h2]Features[/h2]
+[h2]Summary page[/h2]
 [list]
-[*][b]Title bar:[/b] Counts your colonists, those bleeding and those outside their comfortable temperature, with a search by name, weapon or apparel and a sort menu.
+[*][b]Title bar:[/b] Counts your colonists, those bleeding, those having a mental break and those outside their comfortable temperature, with a search by name, weapon or apparel and a sort menu.
+[*][b]Titles:[/b] Each colonist's title shows after their name, as on the vanilla Work tab.
 [*][b]Ideoligion and xenotype:[/b] Their icons, when Ideology or Biotech is active. Click an ideoligion to open it.
 [*][b]Age:[/b] Each colonist's biological age. Hover for the full age.
 [*][b]Fight or flee:[/b] The vanilla hostility response button, changeable right in the table.
-[*][b]Bleeding:[/b] A beating heart with the time until death by blood loss, in red within half a day and yellow within a day, or the bleed rate in green when there's no risk of bleeding out soon. Hover for the blood left and each bleeding wound.
-[*][b]Infection:[/b] The worst infection or other disease a colonist is building immunity to, in green while immunity is winning, yellow when only just, and red while the disease is. Hover for each disease's immunity and severity and how long until immunity or death.
+[*][b]Doing:[/b] What each colonist is doing right now.
+[*][b]Mood:[/b] A mood bar with the minor, major and extreme break thresholds marked, or the mental break in red.
+[*][b]Food, rest and recreation:[/b] A bar for each need, in yellow when low and red when very low.
 [*][b]Skills:[/b] Every skill, in the Bio tab's order, in a box tinted by level, with its passion. Hover for the skill card. Skills added by other mods get their own columns. The headings follow the header style set in UI Rethemed - Work: classic, slanted, vertical or icons.
-[*][b]Gear:[/b] Weapon and worn apparel as item slots. Damaged items show a condition bar, in red below half. Hover for the name, and click to open the info card.
+[*][b]Gear:[/b] Weapon and worn apparel as item slots. Apparel runs head to toe and each slot lines up down the column, with an empty box where a colonist wears nothing there. Damaged items show a condition bar, in red below half. Hover for the name, and click to open the info card.
 [*][b]Protection:[/b] Overall sharp, blunt and heat armor with a bar that fills at 100%, calculated the same way as the Gear tab.
 [*][b]Comfort:[/b] Each colonist's comfortable temperature range, in green while they're comfortable where they are. Hover for the current temperature.
-[*][b]Sorting:[/b] Click a column heading to sort by it, or pick any column in the sort menu. Click a colonist's name to jump to them.
+[/list]
+
+[h2]Health page[/h2]
+[list]
+[*][b]Title bar:[/b] Counts the downed, those needing tending, those awaiting surgery and the bleeding, with the medicine in your stockpiles.
+[*][b]Health and pain:[/b] Overall health and pain level. Hover for what's causing the pain.
+[*][b]Capacities:[/b] Consciousness, moving, manipulation, sight and every other capacity as a percentage, in yellow or red when reduced. Hover for what affects each.
+[*][b]Bleeding:[/b] A beating heart with the time until death by blood loss, in red within half a day and yellow within a day, or the bleed rate in green when there's no risk of bleeding out soon. Hover for the blood left and each bleeding wound.
+[*][b]Infection:[/b] The worst infection or other disease a colonist is building immunity to, in green while immunity is winning, yellow when only just, and red while the disease is. Hover for each disease's immunity and severity and how long until immunity or death.
+[*][b]Tending:[/b] How many conditions need tending now, in red when one is bleeding or an infection. Hover for each, with tend quality and time left.
+[*][b]Medicine and self-tend:[/b] The vanilla medicine setting and the self-tend tick, changeable right in the table.
+[*][b]Missing and added parts:[/b] Missing body parts in red, and prosthetics, bionics and implants as item icons.
+[*][b]Chronic and other conditions:[/b] Chronic conditions and scars, then anything else harmful, such as hypothermia, toxic buildup, malnutrition or an addiction.
+[*][b]Operations:[/b] Queued operations with a dot in green when the next can start, yellow when suspended and red when it can't: no doctor, missing medicine or parts, or no bed. The + button adds an operation, as on the Health tab.
+[*][b]Prisoners and animals:[/b] Prisoners are listed after your colonists, and your animals can be too.
+[/list]
+
+[h2]Both pages[/h2]
+[list]
+[*][b]Sorting:[/b] Click a column heading to sort by it, again to reverse it, and a third time to return to the colonist bar's order, or pick any column in the sort menu. Click a name to jump to that pawn.
 [*][b]Everyone:[/b] Colonists in caravans and transporters are listed too.
 [/list]
 
 [h2]Settings[/h2]
 [list]
 [*][b]Window size[/b]: fit the tab to the screen width or height, or scale it from 70% to 130% of its usual width and 80% to 120% of its usual height, as on the other UI Rethemed tabs.
-[*][b]Height fits the colonists[/b]: the tab is only as tall as its colonists need, growing as they join, up to the height above. On by default.
+[*][b]Height fits the colonists[/b]: the tab is only as tall as its rows need, growing as colonists join, up to the height above. On by default.
+[*][b]Columns[/b]: show or hide any column on either page, and choose whether the Health page lists prisoners and animals.
 [/list]
 
 [h2]Compatibility[/h2]

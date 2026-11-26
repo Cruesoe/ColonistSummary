@@ -3,7 +3,7 @@
   <MainButtonDef>
     <defName>ColonistSummary_Summary</defName>
     <label>summary</label>
-    <description>See every colonist's age, hostility response, bleeding, infections, skills, weapon, apparel, armor and comfortable temperature range in one table.</description>
+    <description>See every colonist in one table: what they're doing, mood, needs, skills, gear, armor and comfort on the Summary page; capacities, bleeding, infections, tending, missing and added parts, conditions and operations on the Health page.</description>
     <tabWindowClass>ColonistSummary.MainTabWindow_ColonistSummary</tabWindowClass>
     <order>35</order>
     <closesWorldView>true</closesWorldView>

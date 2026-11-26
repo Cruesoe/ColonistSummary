@@ -18,11 +18,13 @@
   <loadAfter>
     <li>LazyFridayStudio.UIRethemed.Core</li>
   </loadAfter>
-  <description>Adds a Summary tab that shows every colonist on one row: health, skills, gear and protection, in the look of the UI Rethemed mods.
+  <description>Adds a Summary tab that shows every colonist on one row, with a Summary page for skills, gear and protection and a Health page for everything medical, in the look of the UI Rethemed mods.
 
-Each row shows a colonist's ideoligion and xenotype (with Ideology or Biotech), age, fight-or-flee setting (changeable right there), bleeding with the time until death, infections (green while immunity is winning, yellow when only just, red while the disease is), every skill with its passion, weapon and worn apparel, overall sharp, blunt and heat armor and comfortable temperature range (green while comfortable).
+The Summary page shows each colonist's ideoligion and xenotype (with Ideology or Biotech), age, fight-or-flee setting (changeable right there), what they're doing, mood against the break thresholds, food, rest and recreation, every skill with its passion, weapon and worn apparel (lined up by slot, head to toe), overall sharp, blunt and heat armor and comfortable temperature range.
 
-The title bar counts colonists, the bleeding and the uncomfortable, and has a search by name, weapon or apparel and a sort menu. Hover over anything for details, and click an item to open its info card. Click a column heading to sort by it, and click a colonist's name to jump to them. Skill headings follow the header style set in UI Rethemed - Work. Colonists in caravans and transporters are listed too. The mod settings set the window size as the other UI Rethemed tabs do, and whether its height fits the colonists.
+The Health page shows overall health, pain, every capacity, bleeding with the time until death, infections (green while immunity is winning, yellow when only just, red while the disease is), what needs tending, the medicine and self-tend settings (changeable right there), missing body parts, implants, chronic and other conditions, and queued operations with why the next can't start and a button to add one. Prisoners are listed too, and animals can be.
+
+The title bar counts what matters on each page and has a search and a sort menu. Hover over anything for details, and click an item to open its info card. Click a column heading to sort by it (a third click returns to the usual order), and click a name to jump to that pawn. Each colonist's title shows after their name, as on the vanilla Work tab. With UI Rethemed - Work, the skill and capacity headings follow its header style. Colonists in caravans and transporters are listed too. The mod settings set the window size as the other UI Rethemed tabs do, whether its height fits the rows, and which columns show.
 
 Needs UI Rethemed - Core. Safe to add to or remove from an existing save.</description>
 </ModMetaData>

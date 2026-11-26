@@ -10,6 +10,8 @@ namespace ColonistSummary
     {
         private const float HeartSize = 18f;
 
+        public override bool HeadingLeft => true;
+
         public BleedingColumn()
         {
             width = 84f;

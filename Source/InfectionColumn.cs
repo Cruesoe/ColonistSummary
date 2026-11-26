@@ -12,6 +12,8 @@ namespace ColonistSummary
 
         private static readonly Texture2D VirusTex = CoreWidgets.Icon("virus");
 
+        public override bool HeadingLeft => true;
+
         public InfectionColumn()
         {
             width = 120f;

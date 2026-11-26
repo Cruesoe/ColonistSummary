@@ -6,8 +6,10 @@ using Verse;
 namespace ColonistSummary
 {
     // One skill as a box tinted by level, with its passion and the theme's skill card on hover
-    public class SkillColumn : SummaryColumn
+    public class SkillColumn : BlockColumn
     {
+        public override Texture HeadingIcon => SkillRow.Icon(skill);
+
         private const float BoxSize = 26f;
         private const float PassionSize = 12f;
         private const float MaxLevel = 20f;

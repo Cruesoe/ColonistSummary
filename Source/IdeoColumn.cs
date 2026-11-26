@@ -16,7 +16,9 @@ namespace ColonistSummary
             startsDescending = false;
         }
 
-        public override bool Visible => ModsConfig.IdeologyActive && !Find.IdeoManager.classicMode;
+        public override bool Available => ModsConfig.IdeologyActive && !Find.IdeoManager.classicMode;
+
+        public override string? Requirement => ModsConfig.IdeologyActive ? null : "Ideology";
 
         public override void Cell(Rect rect, PawnSummary row)
         {

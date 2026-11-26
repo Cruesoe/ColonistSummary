@@ -16,7 +16,7 @@ namespace ColonistSummary
         public const float PanelChrome = 42f;
         private const float HeadingHeight = 26f;
         private const float PortraitSize = 26f;
-        private const float ScrollBar = 16f;
+        public const float ScrollBar = 16f;
         private const float EndPad = 8f;
         private const int RowSalt = 30415;
         private const int NameSalt = 30416;
@@ -29,7 +29,7 @@ namespace ColonistSummary
         private static string? noneShown;
         private static string? rowTip;
 
-        public static float ContentWidth => NameWidth + SummaryData.columnsWidth + SkillHeader.TrailingGap + EndPad;
+        public static float ContentWidth => NameWidth + SummaryData.columnsWidth + BlockHeader.TrailingGap + EndPad;
 
         public static float ContentHeight => SummaryData.shown.Count * (RowHeight + RowGap);
 
@@ -49,11 +49,51 @@ namespace ColonistSummary
             Rect inner = CoreWidgets.Panel(rect, title, SummaryColumns.ColonistsTex, out Rect titleBar, 220f);
             CoreWidgets.Line(new Rect(titleBar.xMax - 220f, titleBar.y, 210f, titleBar.height), SummaryData.countText, Theme.TextDim, GameFont.Small, TextAnchor.MiddleRight);
 
-            Rect header = new Rect(inner.x, inner.y, inner.width, SkillHeader.Height);
+            Rect header = new Rect(inner.x, inner.y, inner.width, BlockHeader.Height);
             Rect list = new Rect(inner.x, header.yMax + RowGap, inner.width, inner.yMax - header.yMax - RowGap);
             float width = Mathf.Max(ContentWidth, list.width - (ContentHeight > list.height ? ScrollBar : 0f));
+            WheelAcross(new Rect(inner.x, header.y, inner.width, list.yMax - header.y), list, width);
             Header(header);
             List(list, width);
+        }
+
+        // The mouse wheel scrolls sideways when the rows fit the height, as on the research tree; with Shift it always does
+        private static void WheelAcross(Rect area, Rect list, float width)
+        {
+            Event e = Event.current;
+            if (e.type != EventType.ScrollWheel || !Mouse.IsOver(area)) return;
+            bool down = ContentHeight > list.height - (width > list.width ? ScrollBar : 0f);
+            float visible = list.width - (down ? ScrollBar : 0f);
+            if (width <= visible || (down && !e.shift)) return;
+            scroll.x = Mathf.Clamp(scroll.x + (e.delta.y + e.delta.x) * 20f, 0f, width - visible);
+            e.Use();
+        }
+
+        // Lines along every edge of each block's columns, under the headings, as Work draws with column outlines on
+        private static void BlockLines(float x, float width, float height)
+        {
+            List<SummaryColumn> columns = SummaryData.columns;
+            float shift = BlockHeader.Slant(height);
+            for (int i = 0; i < columns.Count; i++)
+            {
+                SummaryColumn column = columns[i];
+                if (column is BlockColumn)
+                {
+                    Line(x);
+                    if (BlockHeader.IsBlockEnd(columns, i))
+                    {
+                        Line(x + column.width);
+                        x += BlockHeader.TrailingGap;
+                    }
+                }
+                x += column.width;
+            }
+
+            void Line(float at)
+            {
+                float lx = Mathf.Round(at);
+                if (lx + shift >= NameWidth && lx <= width) BlockHeader.ColumnLine(lx, height);
+            }
         }
 
         private static void Header(Rect rect)
@@ -64,6 +104,7 @@ namespace ColonistSummary
             {
                 List<SummaryColumn> columns = SummaryData.columns;
                 float x = NameWidth - scroll.x;
+                if (BlockHeader.DrawsLines) BlockLines(x, rect.width, rect.height);
                 int skill = 0;
                 for (int i = 0; i < columns.Count; i++)
                 {
@@ -73,26 +114,34 @@ namespace ColonistSummary
                     if (cell.xMax > NameWidth && cell.x < rect.width)
                     {
                         bool clicked;
-                        if (column is SkillColumn skillColumn)
+                        if (column is BlockColumn blockColumn)
                         {
-                            clicked = SkillHeader.Draw(cell, skill, skillColumn, sorted, SummaryData.descending);
+                            clicked = BlockHeader.Draw(cell, skill, blockColumn, sorted, SummaryData.descending);
                             if (clicked) SoundDefOf.Tick_High.PlayOneShotOnCamera();
                         }
                         else
                         {
-                            Rect heading = new Rect(cell.x, rect.height - HeadingHeight - 2f, cell.width, HeadingHeight);
-                            clicked = CoreWidgets.SortHeading(heading, column.label, column.icon, sorted, SummaryData.descending, column.label, column.tip);
+                            // Left headings start where the cells' content does
+                            Rect heading = column.HeadingLeft
+                                ? new Rect(cell.x + 2f, rect.height - HeadingHeight - 2f, cell.width - 2f, HeadingHeight)
+                                : new Rect(cell.x, rect.height - HeadingHeight - 2f, cell.width, HeadingHeight);
+                            clicked = CoreWidgets.SortHeading(heading, column.label, column.icon, sorted, SummaryData.descending, column.label, column.tip, column.HeadingLeft);
                         }
                         if (clicked) SummaryData.SortOn(column);
                     }
-                    if (column is SkillColumn)
+                    // Faint divider between neighboring headings, so each heading reads as its column's
+                    if (!(column is BlockColumn) && i + 1 < columns.Count && !(columns[i + 1] is BlockColumn) && x + column.width > NameWidth)
+                    {
+                        Theme.Fill(new Rect(Mathf.Round(x + column.width), rect.height - HeadingHeight, 1f, HeadingHeight - 4f), Faces.Fade(Theme.BGLight, 0.6f));
+                    }
+                    if (column is BlockColumn)
                     {
                         skill++;
-                        if (i + 1 >= columns.Count || !(columns[i + 1] is SkillColumn))
+                        if (BlockHeader.IsBlockEnd(columns, i))
                         {
-                            // Divider between the skill block and the next column
-                            float gap = SkillHeader.TrailingGap;
-                            Theme.Fill(new Rect(Mathf.Round(x + column.width + gap / 2f), 8f, 1f, rect.height - 16f), Faces.Fade(Theme.BGLight, 0.9f));
+                            // Divider between a block and the next column
+                            float gap = BlockHeader.TrailingGap;
+                            Theme.Fill(new Rect(Mathf.Round(x + column.width + gap / 2f), rect.height - HeadingHeight, 1f, HeadingHeight - 4f), Faces.Fade(Theme.BGLight, 0.6f));
                             x += gap;
                         }
                     }
@@ -167,7 +216,7 @@ namespace ColonistSummary
                         SummaryColumn column = columns[i];
                         Rect cell = new Rect(x, row.y, column.width, row.height);
                         if (cell.xMax > pinEdge && cell.x < scroll.x + viewport.width) column.Cell(cell, summary);
-                        if (column is SkillColumn && (i + 1 >= columns.Count || !(columns[i + 1] is SkillColumn))) x += SkillHeader.TrailingGap;
+                        if (BlockHeader.IsBlockEnd(columns, i)) x += BlockHeader.TrailingGap;
                         x += column.width;
                     }
                 }
@@ -202,11 +251,17 @@ namespace ColonistSummary
         private static void NameCell(Rect cell, PawnSummary summary)
         {
             Rect portrait = new Rect(cell.x + 4f, Mathf.Round(cell.center.y - PortraitSize / 2f), PortraitSize, PortraitSize);
-            CoreWidgets.Portrait(portrait, summary.pawn, Theme.HighlightGreen);
+            CoreWidgets.Portrait(portrait, summary.pawn, summary.kind == RowKind.Prisoner ? Theme.HighlightYellow : summary.kind == RowKind.Animal ? Theme.HighlightGray : Theme.HighlightGreen);
             Rect label = new Rect(portrait.xMax + 8f, cell.y, cell.xMax - portrait.xMax - 14f, cell.height);
             bool over = Mouse.IsOver(cell) && InView;
             float hover = ThemeMotion.Hover(cell, NameSalt, over);
             CoreWidgets.Line(label, summary.name, Color.Lerp(Theme.TextBright, Color.white, hover), GameFont.Small, TextAnchor.MiddleLeft);
+            // The title follows the name in a dimmer color, as on the vanilla Work tab
+            if (summary.title.Length > 0 && summary.nameWidth < label.width)
+            {
+                Rect title = new Rect(label.x + summary.nameWidth, label.y, label.width - summary.nameWidth, label.height);
+                CoreWidgets.Line(title, summary.title, Theme.TextDim, GameFont.Small, TextAnchor.MiddleLeft);
+            }
             if (!over) return;
             CoreWidgets.Tip(cell, summary.name, rowTip);
             if (Widgets.ButtonInvisible(cell))

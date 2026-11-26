@@ -10,6 +10,9 @@ namespace ColonistSummary
         public readonly string? countText;
         // Hit points as a fraction of maximum, or -1 when undamaged or without hit points
         public readonly float condition;
+        // Apparel only: the slot it's worn in, in head to toe order (ApparelSlots), and its place in the column
+        public long slot;
+        public int position;
 
         public GearItem(Thing thing, string tip)
         {
