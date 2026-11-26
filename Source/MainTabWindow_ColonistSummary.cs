@@ -75,6 +75,8 @@ namespace ColonistSummary
                     // Every colonist counts, so searching never moves the window
                     float rows = SummaryData.all.Count * (SummaryTable.RowHeight + SummaryTable.RowGap);
                     float fit = TitleHeight + Pad + SummaryTable.PanelChrome + BlockHeader.Height + SummaryTable.RowGap + rows + Pad * 2f;
+                    // Room for the sideways scroll bar when the columns don't fit the width
+                    if (size.x < width) fit += SummaryTable.ScrollBar;
                     size.y = Mathf.Min(size.y, Mathf.Max(MinHeight, Mathf.Ceil(fit)));
                 }
                 return size;

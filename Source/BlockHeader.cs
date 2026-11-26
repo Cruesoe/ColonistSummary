@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UIRethemed.Core;
 using UnityEngine;
 using Verse;
@@ -144,13 +146,53 @@ namespace ColonistSummary
             Matrix4x4 matrix = GUI.matrix;
             try
             {
-                UI.RotateAroundPivot(angle, pivot);
+                Rotate(angle, pivot);
                 CoreWidgets.Line(rect, text, color, GameFont.Small, TextAnchor.MiddleLeft);
             }
             finally
             {
                 GUI.matrix = matrix;
             }
+        }
+
+        // Rotates about the pivot, then moves the pivot back where it was drawn: the 1.7 GUI backend's rotation drifts with
+        // the window's position and the UI scale. Same correction as UI Rethemed - Work's headings; plain rotation without that backend
+        private static void Rotate(float angle, Vector2 pivot)
+        {
+            bool before = DrawnAt(pivot, out Vector2 screen);
+            UI.RotateAroundPivot(angle, pivot);
+            if (before && DrawnAt(pivot, out Vector2 after))
+            {
+                Vector2 drift = screen - after;
+                if (drift.sqrMagnitude >= 0.01f) GUI.matrix = Matrix4x4.TRS(new Vector3(drift.x, drift.y, 0f), Quaternion.identity, Vector3.one) * GUI.matrix;
+            }
+        }
+
+        // Session lifetime: the GUI backend accessor, resolved once; the point converter is rebound when the backend changes
+        private static readonly Func<object>? currentBackend = BindBackend();
+        private static object? boundBackend;
+        private static Func<Vector2, Vector2>? toDevice;
+
+        private static Func<object>? BindBackend()
+        {
+            MethodInfo? getter = typeof(GUI).Assembly.GetType("UnityStubs.Gui.GuiBackend")?.GetProperty("Current", BindingFlags.Static | BindingFlags.Public)?.GetGetMethod();
+            return getter == null ? null : (Func<object>?)Delegate.CreateDelegate(typeof(Func<object>), getter, false);
+        }
+
+        private static bool DrawnAt(Vector2 local, out Vector2 screen)
+        {
+            screen = default;
+            object? backend = currentBackend?.Invoke();
+            if (backend == null) return false;
+            if (backend != boundBackend)
+            {
+                boundBackend = backend;
+                MethodInfo? method = backend.GetType().GetMethod("GuiToDevicePoint", BindingFlags.Instance | BindingFlags.Public, null, new[] { typeof(Vector2) }, null);
+                toDevice = method == null ? null : (Func<Vector2, Vector2>?)Delegate.CreateDelegate(typeof(Func<Vector2, Vector2>), backend, method, false);
+            }
+            if (toDevice == null) return false;
+            screen = toDevice(local);
+            return true;
         }
 
         private static void IconHeading(Rect cell, BlockColumn column, bool sorted, float lit)

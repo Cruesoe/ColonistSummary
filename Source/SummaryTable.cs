@@ -16,7 +16,7 @@ namespace ColonistSummary
         public const float PanelChrome = 42f;
         private const float HeadingHeight = 26f;
         private const float PortraitSize = 26f;
-        private const float ScrollBar = 16f;
+        public const float ScrollBar = 16f;
         private const float EndPad = 8f;
         private const int RowSalt = 30415;
         private const int NameSalt = 30416;
