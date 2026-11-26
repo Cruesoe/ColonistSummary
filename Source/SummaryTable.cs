@@ -52,8 +52,21 @@ namespace ColonistSummary
             Rect header = new Rect(inner.x, inner.y, inner.width, BlockHeader.Height);
             Rect list = new Rect(inner.x, header.yMax + RowGap, inner.width, inner.yMax - header.yMax - RowGap);
             float width = Mathf.Max(ContentWidth, list.width - (ContentHeight > list.height ? ScrollBar : 0f));
+            WheelAcross(new Rect(inner.x, header.y, inner.width, list.yMax - header.y), list, width);
             Header(header);
             List(list, width);
+        }
+
+        // The mouse wheel scrolls sideways when the rows fit the height, as on the research tree; with Shift it always does
+        private static void WheelAcross(Rect area, Rect list, float width)
+        {
+            Event e = Event.current;
+            if (e.type != EventType.ScrollWheel || !Mouse.IsOver(area)) return;
+            bool down = ContentHeight > list.height - (width > list.width ? ScrollBar : 0f);
+            float visible = list.width - (down ? ScrollBar : 0f);
+            if (width <= visible || (down && !e.shift)) return;
+            scroll.x = Mathf.Clamp(scroll.x + (e.delta.y + e.delta.x) * 20f, 0f, width - visible);
+            e.Use();
         }
 
         private static void Header(Rect rect)
@@ -100,7 +113,7 @@ namespace ColonistSummary
                         {
                             // Divider between a block and the next column
                             float gap = BlockHeader.TrailingGap;
-                            Theme.Fill(new Rect(Mathf.Round(x + column.width + gap / 2f), 8f, 1f, rect.height - 16f), Faces.Fade(Theme.BGLight, 0.9f));
+                            Theme.Fill(new Rect(Mathf.Round(x + column.width + gap / 2f), rect.height - HeadingHeight, 1f, HeadingHeight - 4f), Faces.Fade(Theme.BGLight, 0.6f));
                             x += gap;
                         }
                     }
