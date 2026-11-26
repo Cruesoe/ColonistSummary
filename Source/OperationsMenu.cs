@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using RimWorld;
+using UnityEngine;
 using Verse;
 
 namespace ColonistSummary
@@ -29,7 +30,23 @@ namespace ColonistSummary
         {
             List<FloatMenuOption> options = Options(pawn);
             if (options.Count == 0) options.Add(new FloatMenuOption("ColonistSummary_NoOperations".Translate(), null));
-            Find.WindowStack.Add(new FloatMenu(options));
+            Find.WindowStack.Add(new Menu(options));
+        }
+
+        // A float menu that leaves room on its right for vanilla's ingredients popup, which otherwise gets pushed back over
+        // the menu near the screen edge and flickers with it under the mouse
+        private class Menu : FloatMenu
+        {
+            private const float InfoRoom = 330f;
+
+            public Menu(List<FloatMenuOption> options) : base(options) { }
+
+            protected override void SetInitialSizeAndPosition()
+            {
+                base.SetInitialSizeAndPosition();
+                float limit = UI.screenWidth - InfoRoom;
+                if (windowRect.xMax > limit) windowRect.x = Mathf.Max(0f, limit - windowRect.width);
+            }
         }
 
         // The same recipes and filters as the vanilla Health tab's operations list
