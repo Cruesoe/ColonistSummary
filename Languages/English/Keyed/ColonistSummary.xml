@@ -19,7 +19,6 @@
   <ColonistSummary_NoColonists>No colonists.</ColonistSummary_NoColonists>
   <ColonistSummary_NoneShown>No colonists match the search.</ColonistSummary_NoneShown>
   <ColonistSummary_RowTip>Click to select this colonist and jump to them.</ColonistSummary_RowTip>
-  <ColonistSummary_WorkTemplateTip>Work templates from UI Rethemed - Work: {0}</ColonistSummary_WorkTemplateTip>
 
   <ColonistSummary_Search>Search</ColonistSummary_Search>
   <ColonistSummary_SearchHint>Search colonists</ColonistSummary_SearchHint>

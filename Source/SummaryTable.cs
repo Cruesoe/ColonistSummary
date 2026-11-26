@@ -255,12 +255,15 @@ namespace ColonistSummary
             Rect label = new Rect(portrait.xMax + 8f, cell.y, cell.xMax - portrait.xMax - 14f, cell.height);
             bool over = Mouse.IsOver(cell) && InView;
             float hover = ThemeMotion.Hover(cell, NameSalt, over);
-            Rect tag = TemplateTag(label, summary);
-            if (tag.width > 0f) label.xMax = tag.x - 6f;
             CoreWidgets.Line(label, summary.name, Color.Lerp(Theme.TextBright, Color.white, hover), GameFont.Small, TextAnchor.MiddleLeft);
+            // The title follows the name in a dimmer color, as on the vanilla Work tab
+            if (summary.title.Length > 0 && summary.nameWidth < label.width)
+            {
+                Rect title = new Rect(label.x + summary.nameWidth, label.y, label.width - summary.nameWidth, label.height);
+                CoreWidgets.Line(title, summary.title, Theme.TextDim, GameFont.Small, TextAnchor.MiddleLeft);
+            }
             if (!over) return;
-            if (tag.width > 0f && Mouse.IsOver(tag)) CoreWidgets.Tip(tag, summary.workTag, summary.workTagTip);
-            else CoreWidgets.Tip(cell, summary.name, rowTip);
+            CoreWidgets.Tip(cell, summary.name, rowTip);
             if (Widgets.ButtonInvisible(cell))
             {
                 CameraJumper.TryJumpAndSelect(summary.pawn);
@@ -269,28 +272,6 @@ namespace ColonistSummary
                     Find.MainTabsRoot.EscapeCurrentTab(false);
                 }
             }
-        }
-
-        // UI Rethemed - Work's template chip at the right of the name, as on the Work tab; at most 55% of the room
-        private static Rect TemplateTag(Rect label, PawnSummary summary)
-        {
-            if (summary.workTag.Length == 0) return default;
-            float width = Mathf.Min(summary.workTagWidth, label.width * 0.55f);
-            if (width < 30f) return default;
-            Rect tag = new Rect(label.xMax - width, Mathf.Round(label.center.y - 10f), width, 20f);
-            Color accent = summary.workTagColor;
-            Rounded.BeginBatch();
-            try
-            {
-                Rounded.Fill(tag, Color.Lerp(Theme.BG, accent, 0.3f), Corners.All);
-                Rounded.Border(tag, accent, Corners.All);
-            }
-            finally
-            {
-                Rounded.EndBatch();
-            }
-            CoreWidgets.Line(tag.ContractedBy(4f, 0f), summary.workTag, Color.white, GameFont.Small, TextAnchor.MiddleCenter);
-            return tag;
         }
     }
 }

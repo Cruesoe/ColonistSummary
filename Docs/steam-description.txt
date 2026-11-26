@@ -4,8 +4,8 @@ See at a glance who's bleeding out, who needs tending, who's waiting on an opera
 
 [h2]Summary page[/h2]
 [list]
-[*][b]Title bar:[/b] Counts your colonists, those bleeding, those having a mental break and those outside their comfortable temperature, with a search by name, weapon, apparel or work template and a sort menu.
-[*][b]Work template:[/b] With UI Rethemed - Work, each colonist's work template shows beside their name, as on the Work tab.
+[*][b]Title bar:[/b] Counts your colonists, those bleeding, those having a mental break and those outside their comfortable temperature, with a search by name, weapon or apparel and a sort menu.
+[*][b]Titles:[/b] Each colonist's title shows after their name, as on the vanilla Work tab.
 [*][b]Ideoligion and xenotype:[/b] Their icons, when Ideology or Biotech is active. Click an ideoligion to open it.
 [*][b]Age:[/b] Each colonist's biological age. Hover for the full age.
 [*][b]Fight or flee:[/b] The vanilla hostility response button, changeable right in the table.

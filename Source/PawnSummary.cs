@@ -18,12 +18,10 @@ namespace ColonistSummary
 
         public readonly Pawn pawn;
         public string name = "";
-        // Work template tag from UI Rethemed - Work, empty without one
-        public string workTag = "";
-        public string workTagTip = "";
-        public Color workTagColor;
-        public float workTagWidth;
-        private string workNames = "";
+        public float nameWidth;
+        // ", " and the pawn's title, as the vanilla Work tab shows it after the name; empty without one
+        public string title = "";
+        private string? titleSource;
         // Place in the colonist bar's order
         public int order;
         // Lower-case name, weapon and apparel labels for the search field
@@ -156,7 +154,6 @@ namespace ColonistSummary
         {
             searchBuilder.Clear();
             searchBuilder.Append(name);
-            if (workNames.Length > 0) searchBuilder.Append('\n').Append(workNames);
             for (int i = 0; i < weapons.Count; i++) searchBuilder.Append('\n').Append(weapons[i].thing.LabelNoCount);
             for (int i = 0; i < apparel.Count; i++) searchBuilder.Append('\n').Append(apparel[i].thing.LabelNoCount);
             searchText = searchBuilder.ToString().ToLowerInvariant();
@@ -173,15 +170,17 @@ namespace ColonistSummary
             statsHediffCount = hediffs.Count;
 
             string newName = pawn.LabelShortCap;
-            WorkTemplates.TryGet(pawn, out string tag, out string names, out workTagColor);
-            if (newName != name || tag != workTag || names != workNames)
+            if (newName != name)
             {
                 name = newName;
-                workTag = tag;
-                workNames = names;
-                workTagTip = tag.Length > 0 ? "ColonistSummary_WorkTemplateTip".Translate(names).ToString() : "";
-                workTagWidth = tag.Length > 0 ? Mathf.Ceil(CoreWidgets.Width(tag, GameFont.Small)) + 12f : 0f;
+                nameWidth = Mathf.Ceil(CoreWidgets.Width(name, GameFont.Small));
                 RebuildSearch();
+            }
+            string? titleShort = pawn.Name != null && pawn.story != null && !pawn.IsSubhuman ? pawn.story.TitleShortCap : null;
+            if (titleShort != titleSource)
+            {
+                titleSource = titleShort;
+                title = titleShort.NullOrEmpty() ? "" : ", " + titleShort;
             }
             Ideo? ideo = pawn.Ideo;
             if (ideo != tipIdeo || (ideo != null && ideo.name != tipIdeoName))
