@@ -150,19 +150,20 @@
   <ColonistSummary_AddOperationTip>Opens the list of operations, as on the Health tab.</ColonistSummary_AddOperationTip>
   <ColonistSummary_NoOperations>No operations available</ColonistSummary_NoOperations>
 
-  <ColonistSummary_Settings_Columns>Columns</ColonistSummary_Settings_Columns>
-  <ColonistSummary_Settings_SummaryPage>Summary page</ColonistSummary_Settings_SummaryPage>
-  <ColonistSummary_Settings_HealthPage>Health page</ColonistSummary_Settings_HealthPage>
+  <ColonistSummary_Settings_SummaryPage>Summary page columns</ColonistSummary_Settings_SummaryPage>
+  <ColonistSummary_Settings_HealthPage>Health page columns</ColonistSummary_Settings_HealthPage>
   <ColonistSummary_Settings_Prisoners>List prisoners</ColonistSummary_Settings_Prisoners>
   <ColonistSummary_Settings_PrisonersTip>Lists prisoners on the Health page after your colonists.</ColonistSummary_Settings_PrisonersTip>
   <ColonistSummary_Settings_Animals>List animals</ColonistSummary_Settings_Animals>
   <ColonistSummary_Settings_AnimalsTip>Lists your animals on the Health page after your colonists and prisoners.</ColonistSummary_Settings_AnimalsTip>
-  <ColonistSummary_Settings_ColumnsResetTip>Shows every column again, lists prisoners and stops listing animals.</ColonistSummary_Settings_ColumnsResetTip>
+  <ColonistSummary_Settings_ColumnsReset>Reset columns</ColonistSummary_Settings_ColumnsReset>
+  <ColonistSummary_Settings_ColumnsResetNothing>Every column is already shown, and the Health page lists prisoners but not animals.</ColonistSummary_Settings_ColumnsResetNothing>
+  <ColonistSummary_Settings_ColumnsResetTip>Shows every column on both pages again, lists prisoners on the Health page and stops listing animals.</ColonistSummary_Settings_ColumnsResetTip>
   <ColonistSummary_Settings_AllShown>All columns shown</ColonistSummary_Settings_AllShown>
   <ColonistSummary_Settings_HiddenCount>{0} hidden</ColonistSummary_Settings_HiddenCount>
-  <ColonistSummary_Settings_ListsBoth>Health lists prisoners and animals</ColonistSummary_Settings_ListsBoth>
-  <ColonistSummary_Settings_ListsPrisoners>Health lists prisoners</ColonistSummary_Settings_ListsPrisoners>
-  <ColonistSummary_Settings_ListsAnimals>Health lists animals</ColonistSummary_Settings_ListsAnimals>
-  <ColonistSummary_Settings_ListsColonists>Health lists colonists only</ColonistSummary_Settings_ListsColonists>
+  <ColonistSummary_Settings_ListsBoth>with prisoners and animals</ColonistSummary_Settings_ListsBoth>
+  <ColonistSummary_Settings_ListsPrisoners>with prisoners</ColonistSummary_Settings_ListsPrisoners>
+  <ColonistSummary_Settings_ListsAnimals>with animals</ColonistSummary_Settings_ListsAnimals>
+  <ColonistSummary_Settings_ListsColonists>colonists only</ColonistSummary_Settings_ListsColonists>
   <ColonistSummary_Settings_NeedsDlc>Needs {0}.</ColonistSummary_Settings_NeedsDlc>
 </LanguageData>

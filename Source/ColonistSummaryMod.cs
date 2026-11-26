@@ -20,7 +20,7 @@ namespace ColonistSummary
 
         public override void DoSettingsWindowContents(Rect inRect)
         {
-            SettingsPage.Draw(inRect.LeftPart(0.5f));
+            SettingsPage.Draw(inRect);
             SettingsCards.ThemeButton(inRect, SettingsCategory());
             Theme.Reset();
         }
