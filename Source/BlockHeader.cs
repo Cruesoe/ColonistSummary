@@ -11,7 +11,10 @@ namespace ColonistSummary
     public static class BlockHeader
     {
         private const float LabelRow = 20f;
+        // Space under the labels: classic keeps room for the sort marker below; turned labels sit on the other headings' line
         private const float LabelFoot = 24f;
+        private const float SlantedFoot = 13f;
+        private const float VerticalFoot = 6f;
         private const float MaxRotatedLabel = 110f;
         private const float MinRotatedLabel = 40f;
         private const float IconSquare = 30f;
@@ -65,8 +68,8 @@ namespace ColonistSummary
                 float rotated = Mathf.Clamp(longestLabel, MinRotatedLabel, MaxRotatedLabel);
                 switch (style)
                 {
-                    case SkillHeaderStyle.Vertical: return Mathf.Round(rotated + LabelFoot + 6f);
-                    case SkillHeaderStyle.Slanted: return Mathf.Round(rotated * SlantSin + LabelRow * SlantCos + LabelFoot);
+                    case SkillHeaderStyle.Vertical: return Mathf.Round(rotated + VerticalFoot + 6f);
+                    case SkillHeaderStyle.Slanted: return Mathf.Round(rotated * SlantSin + LabelRow * SlantCos + SlantedFoot);
                     case SkillHeaderStyle.Icons: return 56f;
                     default: return 54f;
                 }
@@ -99,7 +102,7 @@ namespace ColonistSummary
             }
 
             Color color = sorted ? Color.white : Color.Lerp(Theme.TextDim, Color.white, lit);
-            float foot = cell.yMax - LabelFoot;
+            float foot = cell.yMax - (style == SkillHeaderStyle.Vertical ? VerticalFoot : style == SkillHeaderStyle.Slanted ? SlantedFoot : LabelFoot);
             switch (style)
             {
                 case SkillHeaderStyle.Vertical:
@@ -120,7 +123,13 @@ namespace ColonistSummary
                     }
                     break;
             }
-            if (sorted) CoreWidgets.SortMarker(new Rect(Mathf.Round(cell.center.x) - 4f, cell.yMax - 22f, 8f, 10f), descending);
+            // Turned labels reach the bottom, so their sort marker sits beside the label's foot: left of a slanted one, right of a vertical one
+            if (sorted)
+            {
+                float markerX = style == SkillHeaderStyle.Slanted ? cell.center.x - 14f : style == SkillHeaderStyle.Vertical ? cell.center.x + 10f : cell.center.x - 4f;
+                float markerY = style == SkillHeaderStyle.Slanted || style == SkillHeaderStyle.Vertical ? cell.yMax - 20f : cell.yMax - 22f;
+                CoreWidgets.SortMarker(new Rect(Mathf.Round(markerX), markerY, 8f, 10f), descending);
+            }
 
             if (!over) return false;
             CoreWidgets.Tip(hit, column.label, column.tip);
